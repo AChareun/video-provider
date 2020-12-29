@@ -1,0 +1,41 @@
+{
+    "name": "video-provider",
+    "version": "1.0.0",
+    "description": "api to GET audiovisual titles info and play links",
+    "main": "app.js",
+    "scripts": {
+        "start": "node src/app.js",
+        "dev": "nodemon src/app.js",
+        "test": "jest --collect-coverage",
+        "test:dev": "jest --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AChareun/video-provider.git"
+    },
+    "author": "Alonso Chareun",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/AChareun/video-provider/issues"
+    },
+    "homepage": "https://github.com/AChareun/video-provider#readme",
+    "devDependencies": {
+        "@types/jest": "^26.0.19",
+        "eslint": "^7.16.0",
+        "eslint-config-airbnb-base": "^14.2.1",
+        "eslint-plugin-import": "^2.22.1",
+        "eslint-plugin-jest": "^24.1.3",
+        "eslint-plugin-prettier": "^3.3.0",
+        "jest": "^26.6.3",
+        "jsdoc": "^3.6.6",
+        "nodemon": "^2.0.6",
+        "prettier": "^2.2.1"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "rsdi": "^1.0.10",
+        "sequelize": "^6.3.5"
+    }
+}
