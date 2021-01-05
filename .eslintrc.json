@@ -5,14 +5,13 @@
         "node": true,
         "jest/globals": true
     },
-    "extends": ["airbnb", "prettier"],
-    "plugins": ["prettier", "jest"],
+    "extends": ["airbnb-base", "prettier"],
+    "plugins": ["jest"],
     "parserOptions": {
         "ecmaVersion": 11
     },
     "rules": {
-        "prettier/prettier": ["error"],
-        "indent": ["error", 4],
+        "indent": ["error", 4, { "SwitchCase": 1 }],
         "max-len": "off"
     }
 }
