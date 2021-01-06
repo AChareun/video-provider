@@ -9,7 +9,7 @@ module.exports = class Title {
      * @param { Date } premiereDate
      * @param { string } trailerUrl
      */
-    constructor(
+    constructor({
         id,
         name,
         synopsis,
@@ -18,7 +18,7 @@ module.exports = class Title {
         sourceImage,
         premiereDate,
         trailerUrl,
-    ) {
+    }) {
         this.id = id;
         this.name = name;
         this.synopsis = synopsis;

@@ -12,33 +12,33 @@ module.exports = class TitleModel extends Model {
     static setup(sequelizeInstance) {
         TitleModel.init(
             {
-                Id: {
+                id: {
                     type: DataTypes.BIGINT,
                     autoIncrement: true,
                     allowNull: false,
                     primaryKey: true,
                     unique: true,
                 },
-                Name: {
+                name: {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },
-                Synopsis: {
+                synopsis: {
                     type: DataTypes.STRING,
                 },
-                EpisodeCount: {
+                episodeCount: {
                     type: DataTypes.INTEGER,
                 },
-                SeasonCount: {
+                seasonCount: {
                     type: DataTypes.INTEGER,
                 },
-                SourceImage: {
+                sourceImage: {
                     type: DataTypes.INTEGER,
                 },
-                PremiereDate: {
+                premiereDate: {
                     type: DataTypes.DATE,
                 },
-                TrailerUrl: {
+                trailerUrl: {
                     type: DataTypes.STRING,
                 },
             },
