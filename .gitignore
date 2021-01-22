@@ -105,3 +105,6 @@ dist
 
 # DB Files
 data/
+
+# Compiled build
+built
