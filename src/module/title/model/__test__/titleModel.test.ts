@@ -1,10 +1,10 @@
-const { Sequelize } = require('sequelize');
+import { Sequelize } from 'sequelize';
 
-const TitleModel = require('../titleModel');
+import { TitleModel } from '../titleModel';
 
 const sequelizeInstance = new Sequelize('sqlite::memory:');
 
-test('TitleModel setup creates Titles table on database', async () => {
+test('TitleModel setup creates Titles table on database', async (): Promise<void> => {
     TitleModel.setup(sequelizeInstance);
 
     await sequelizeInstance.sync({ force: true });

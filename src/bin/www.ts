@@ -1,10 +1,10 @@
 require('dotenv').config();
-
-const http = require('http');
 const debug = require('debug')('video-provider:server');
 
-const normalizePort = require('../lib/normalizePort');
-const app = require('../app');
+import http = require('http');
+
+import { normalizePort } from '../lib/normalizePort';
+import { app } from '../app';
 
 /**
  * Get port from environment and store in Express.
@@ -23,7 +23,7 @@ const server = http.createServer(app);
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+function onError(error: any): void {
     if (error.syscall !== 'listen') {
         throw error;
     }
@@ -49,9 +49,9 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
+function onListening(): void {
     const addr = server.address();
-    const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
+    const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr?.port}`;
     debug(`Listening on ${bind}`);
 }
 

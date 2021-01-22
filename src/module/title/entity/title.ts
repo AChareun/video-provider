@@ -1,14 +1,13 @@
-module.exports = class Title {
-    /**
-     * @param { number } id
-     * @param { string } name
-     * @param { string } synopsis
-     * @param { number } episodeCount
-     * @param { number } seasonCount
-     * @param { string } sourceImage
-     * @param { Date } premiereDate
-     * @param { string } trailerUrl
-     */
+export class Title {
+    id: number;
+    name: string;
+    synopsis: string;
+    episodeCount: number;
+    seasonCount: number;
+    sourceImage: string;
+    premiereDate: Date;
+    trailerUrl: string;
+
     constructor({
         id,
         name,
@@ -18,6 +17,15 @@ module.exports = class Title {
         sourceImage,
         premiereDate,
         trailerUrl,
+    }: {
+        id: number;
+        name: string;
+        synopsis: string;
+        episodeCount: number;
+        seasonCount: number;
+        sourceImage: string;
+        premiereDate: Date;
+        trailerUrl: string;
     }) {
         this.id = id;
         this.name = name;
@@ -28,4 +36,4 @@ module.exports = class Title {
         this.premiereDate = premiereDate;
         this.trailerUrl = trailerUrl;
     }
-};
+}
