@@ -1,9 +1,9 @@
 import { Sequelize } from 'sequelize';
 
-import {TitleRepository} from '../titleRepository';
-import {TitleNotFoundError} from '../../error/titleNotFoundError';
-import {TitleModel} from '../../../model/titleModel';
-import {Title} from '../../../entity/title';
+import { TitleRepository } from '../titleRepository';
+import { TitleNotFoundError } from '../../error/titleNotFoundError';
+import { TitleModel } from '../../../model/titleModel';
+import { Title } from '../../../entity/title';
 import { fromModelToEntity } from '../../../mapper/titleMapper';
 
 /**
@@ -16,7 +16,7 @@ const testSequelizeInstance = new Sequelize('sqlite::memory:');
 
 let testRepo: TitleRepository;
 
-let titleModel: TitleModel;
+let titleModel: typeof TitleModel;
 
 const fakeNewTitle = {
     name: 'Title',
@@ -29,20 +29,21 @@ const fakeNewTitle = {
 };
 
 const insertTitle = async (): Promise<Title> => {
-    // @ts-ignore
     const newTitle = await titleModel.create(fakeNewTitle);
     return fromModelToEntity(newTitle);
 };
 
-beforeAll(():void => {
+beforeAll((): void => {
     titleModel = TitleModel.setup(testSequelizeInstance);
     testRepo = new TitleRepository(titleModel);
 });
 
-beforeEach(async (done): Promise<void> => {
-    await testSequelizeInstance.sync({ force: true });
-    done();
-});
+beforeEach(
+    async (done): Promise<void> => {
+        await testSequelizeInstance.sync({ force: true });
+        done();
+    }
+);
 
 /**
  * ---------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 require('dotenv').config();
 const debug = require('debug')('video-provider:server');
 
-import http = require('http');
+import * as http from 'http';
 
 import { normalizePort } from '../lib/normalizePort';
 import { app } from '../app';

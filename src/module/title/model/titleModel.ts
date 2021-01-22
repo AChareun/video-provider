@@ -1,7 +1,35 @@
-import { Model, DataTypes, Sequelize } from 'sequelize';
+import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
 
-export class TitleModel extends Model {
-    static setup(sequelizeInstance: Sequelize): TitleModel {
+interface TitleAttributes {
+    id: number;
+    name: string;
+    synopsis: string | null;
+    episodeCount: number | null;
+    seasonCount: number | null;
+    sourceImage: string | null;
+    premiereDate: Date | null;
+    trailerUrl: string | null;
+}
+
+interface TitleCreationAttributes extends Optional<TitleAttributes, 'id'> {}
+
+export class TitleModel
+    extends Model<TitleAttributes, TitleCreationAttributes>
+    implements TitleAttributes {
+    id!: number;
+    name!: string;
+    synopsis!: string | null;
+    episodeCount!: number | null;
+    seasonCount!: number | null;
+    sourceImage!: string | null;
+    premiereDate!: Date | null;
+    trailerUrl!: string | null;
+
+    readonly createdAt!: Date;
+    readonly updatedAt!: Date;
+    readonly deletedAt!: Date;
+
+    static setup(sequelizeInstance: Sequelize) {
         TitleModel.init(
             {
                 id: {
@@ -42,7 +70,6 @@ export class TitleModel extends Model {
             }
         );
 
-        // @ts-ignore
         return TitleModel;
     }
-};
+}

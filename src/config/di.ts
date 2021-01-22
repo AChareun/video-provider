@@ -18,10 +18,9 @@ function addCommonDefinitions(container: DIContainer): void {
     });
 }
 
-function configureTitleModel(container: DIContainer): TitleModel {
+function configureTitleModel(container: DIContainer): typeof TitleModel {
     TitleModel.setup(container.get('Sequelize'));
 
-    //@ts-ignore
     return TitleModel;
 }
 

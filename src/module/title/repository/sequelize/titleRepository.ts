@@ -6,9 +6,9 @@ import { Title } from '../../entity/title';
 
 export class TitleRepository extends AbstractTitleRepository {
 
-    titleModel: TitleModel;
+    titleModel: typeof TitleModel;
 
-    constructor(titleModel: TitleModel) {
+    constructor(titleModel: typeof TitleModel) {
         super();
         this.titleModel = titleModel;
     }

@@ -38,7 +38,7 @@ test('getPaginated method should call corresponding service method and call send
     expect(serviceMock.getPaginated).toHaveBeenCalledWith(1, 0);
 
     expect(sendMock).toHaveBeenCalledTimes(1);
-    expect(sendMock).toHaveBeenCalledWith(titleMock);
+    expect(sendMock).toHaveBeenCalledWith([titleMock]);
 });
 
 test('getById method should call corresponding service method and call send with resolve', async () => {
