@@ -1,14 +1,9 @@
-const { default: DIContainer, factory, object, get } = require('rsdi');
-const { Sequelize } = require('sequelize');
+import { default as DIContainer, factory, object, get } from 'rsdi';
+import { Sequelize } from 'sequelize';
 
-const {
-    TitleController,
-    TitleService,
-    TitleRepository,
-    TitleModel,
-} = require('../module/title/module');
+import { TitleController, TitleService, TitleRepository, TitleModel } from '../module/title/module';
 
-function configureSequelizeDatabase() {
+function configureSequelizeDatabase(): Sequelize {
     const sequelize = new Sequelize({
         dialect: 'sqlite',
         storage: process.env.DB_PATH,
@@ -17,28 +12,20 @@ function configureSequelizeDatabase() {
     return sequelize;
 }
 
-/**
- * @param {DIContainer} container
- */
-function addCommonDefinitions(container) {
+function addCommonDefinitions(container: DIContainer): void {
     container.addDefinitions({
         Sequelize: factory(configureSequelizeDatabase),
     });
 }
 
-/**
- * @param { DIContainer } container
- */
-function configureTitleModel(container) {
+function configureTitleModel(container: DIContainer): TitleModel {
     TitleModel.setup(container.get('Sequelize'));
 
+    //@ts-ignore
     return TitleModel;
 }
 
-/**
- * @param { DIContainer } container
- */
-function addTitleModuleDefinitions(container) {
+function addTitleModuleDefinitions(container: DIContainer): void {
     container.addDefinitions({
         TitleModel: factory(configureTitleModel),
         TitleRepository: object(TitleRepository).construct(get('TitleModel')),
@@ -47,7 +34,7 @@ function addTitleModuleDefinitions(container) {
     });
 }
 
-module.exports = function configureDI() {
+export function configureDI(): DIContainer {
     const container = new DIContainer();
 
     addCommonDefinitions(container);

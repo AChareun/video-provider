@@ -1,4 +1,4 @@
-const TitleService = require('../titleService');
+import { TitleService } from '../titleService';
 
 const repositoryMock = {
     getPaginated: jest.fn(),

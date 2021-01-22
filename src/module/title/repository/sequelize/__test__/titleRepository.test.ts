@@ -1,10 +1,10 @@
-const { Sequelize } = require('sequelize');
+import { Sequelize } from 'sequelize';
 
-const TitleRepository = require('../titleRepository');
-const TitleNotFoundError = require('../../error/titleNotFoundError');
-const TitleModel = require('../../../model/titleModel');
-const Title = require('../../../entity/title');
-const { fromModelToEntity } = require('../../../mapper/titleMapper');
+import {TitleRepository} from '../titleRepository';
+import {TitleNotFoundError} from '../../error/titleNotFoundError';
+import {TitleModel} from '../../../model/titleModel';
+import {Title} from '../../../entity/title';
+import { fromModelToEntity } from '../../../mapper/titleMapper';
 
 /**
  *
@@ -13,17 +13,12 @@ const { fromModelToEntity } = require('../../../mapper/titleMapper');
  */
 
 const testSequelizeInstance = new Sequelize('sqlite::memory:');
-/**
- * @type {TitleRepository} testRepo
- */
-let testRepo;
 
-/**
- * @type {TitleModel} titleModel
- */
-let titleModel;
+let testRepo: TitleRepository;
 
-const fakeNewTitle = new Title({
+let titleModel: TitleModel;
+
+const fakeNewTitle = {
     name: 'Title',
     synopsis: 'Synopsis',
     episodeCount: 10,
@@ -31,19 +26,20 @@ const fakeNewTitle = new Title({
     sourceImage: 'coverUrl',
     premiereDate: new Date(),
     trailerUrl: 'trailerUrl',
-});
+};
 
-const insertTitle = async () => {
+const insertTitle = async (): Promise<Title> => {
+    // @ts-ignore
     const newTitle = await titleModel.create(fakeNewTitle);
     return fromModelToEntity(newTitle);
 };
 
-beforeAll(() => {
+beforeAll(():void => {
     titleModel = TitleModel.setup(testSequelizeInstance);
     testRepo = new TitleRepository(titleModel);
 });
 
-beforeEach(async (done) => {
+beforeEach(async (done): Promise<void> => {
     await testSequelizeInstance.sync({ force: true });
     done();
 });

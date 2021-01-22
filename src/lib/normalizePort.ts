@@ -2,7 +2,7 @@
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+export function normalizePort(val: string): string | number | boolean {
     const port = parseInt(val, 10);
 
     if (Number.isNaN(port)) {
@@ -17,5 +17,3 @@ function normalizePort(val) {
 
     return false;
 }
-
-module.exports = normalizePort;

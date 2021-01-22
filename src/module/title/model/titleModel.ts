@@ -1,15 +1,7 @@
-/**
- * @typedef { import('sequelize').Sequelize } Sequelize
- */
+import { Model, DataTypes, Sequelize } from 'sequelize';
 
-const { Model, DataTypes } = require('sequelize');
-
-module.exports = class TitleModel extends Model {
-    /**
-     * @param { Sequelize } sequelizeInstance
-     * @returns { TitleModel }
-     */
-    static setup(sequelizeInstance) {
+export class TitleModel extends Model {
+    static setup(sequelizeInstance: Sequelize): TitleModel {
         TitleModel.init(
             {
                 id: {
@@ -50,6 +42,7 @@ module.exports = class TitleModel extends Model {
             }
         );
 
+        // @ts-ignore
         return TitleModel;
     }
 };
