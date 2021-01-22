@@ -3,8 +3,8 @@ require('dotenv').config();
 const http = require('http');
 const debug = require('debug')('video-provider:server');
 
-const normalizePort = require('../src/lib/normalizePort');
-const app = require('../src/app');
+const normalizePort = require('../lib/normalizePort');
+const app = require('../app');
 
 /**
  * Get port from environment and store in Express.
