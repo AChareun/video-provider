@@ -19,6 +19,7 @@ let testRepo: TitleRepository;
 let titleModel: typeof TitleModel;
 
 const fakeNewTitle = {
+    id: undefined,
     name: 'Title',
     synopsis: 'Synopsis',
     episodeCount: 10,
@@ -80,4 +81,10 @@ test('Method getPaginated returns correct amount of titles', async () => {
 
     await expect(testRepo.getPaginated(4, 0)).resolves.toEqual([title1, title2, title3, title4]);
     await expect(testRepo.getPaginated(1, 2)).resolves.toEqual([title3]);
+});
+
+test('Method addTitle correctly saves a new record with id 1', async () => {
+    const newTitle = await testRepo.addTitle(fakeNewTitle);
+
+    await expect(testRepo.getById(1)).resolves.toEqual(newTitle);
 });

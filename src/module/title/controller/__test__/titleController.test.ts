@@ -17,9 +17,11 @@ const serviceMock = {
     titleRepository: {
         getPaginated: jest.fn(() => Promise.resolve([titleMock])),
         getById: jest.fn(() => Promise.resolve(titleMock)),
+        addTitle: jest.fn(() => Promise.resolve(titleMock)),
     },
     getPaginated: jest.fn(() => Promise.resolve([titleMock])),
     getById: jest.fn(() => Promise.resolve(titleMock)),
+    addTitle: jest.fn(() => Promise.resolve(titleMock)),
 };
 
 const sendMock = jest.fn();
@@ -51,3 +53,15 @@ test('getById method should call corresponding service method and call send with
     expect(sendMock).toHaveBeenCalledTimes(1);
     expect(sendMock).toHaveBeenCalledWith(titleMock);
 });
+
+test('postTitle method should call corresponding service method and call send with resolve', async () => {
+    // @ts-ignore
+    await testController.postTitle({ body: titleMock }, { send: sendMock });
+
+    expect(serviceMock.addTitle).toHaveBeenCalledTimes(1);
+    expect(serviceMock.addTitle).toHaveBeenCalledWith(titleMock);
+
+    expect(sendMock).toHaveBeenCalledTimes(1);
+    expect(sendMock).toHaveBeenCalledWith('OK!');
+})
+

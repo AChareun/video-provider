@@ -1,12 +1,12 @@
 export class Title {
-    id: number;
+    id: number | undefined;
     name: string;
-    synopsis: string | null;
-    episodeCount: number | null;
-    seasonCount: number | null;
-    sourceImage: string | null;
-    premiereDate: Date | null;
-    trailerUrl: string | null;
+    synopsis: string | undefined;
+    episodeCount: number | undefined;
+    seasonCount: number | undefined;
+    sourceImage: string | undefined;
+    premiereDate: Date | undefined;
+    trailerUrl: string | undefined;
 
     constructor({
         id,
@@ -18,14 +18,14 @@ export class Title {
         premiereDate,
         trailerUrl,
     }: {
-        id: number;
+        id: number | undefined;
         name: string;
-        synopsis: string | null;
-        episodeCount: number | null;
-        seasonCount: number | null;
-        sourceImage: string | null;
-        premiereDate: Date | null;
-        trailerUrl: string | null;
+        synopsis: string | undefined;
+        episodeCount: number | undefined;
+        seasonCount: number | undefined;
+        sourceImage: string | undefined;
+        premiereDate: Date | undefined;
+        trailerUrl: string | undefined;
     }) {
         this.id = id;
         this.name = name;

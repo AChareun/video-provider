@@ -3,12 +3,12 @@ import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
 interface TitleAttributes {
     id: number;
     name: string;
-    synopsis: string | null;
-    episodeCount: number | null;
-    seasonCount: number | null;
-    sourceImage: string | null;
-    premiereDate: Date | null;
-    trailerUrl: string | null;
+    synopsis: string | undefined;
+    episodeCount: number | undefined;
+    seasonCount: number | undefined;
+    sourceImage: string | undefined;
+    premiereDate: Date | undefined;
+    trailerUrl: string | undefined;
 }
 
 interface TitleCreationAttributes extends Optional<TitleAttributes, 'id'> {}
@@ -18,12 +18,12 @@ export class TitleModel
     implements TitleAttributes {
     id!: number;
     name!: string;
-    synopsis!: string | null;
-    episodeCount!: number | null;
-    seasonCount!: number | null;
-    sourceImage!: string | null;
-    premiereDate!: Date | null;
-    trailerUrl!: string | null;
+    synopsis!: string | undefined;
+    episodeCount!: number | undefined;
+    seasonCount!: number | undefined;
+    sourceImage!: string | undefined;
+    premiereDate!: Date | undefined;
+    trailerUrl!: string | undefined;
 
     readonly createdAt!: Date;
     readonly updatedAt!: Date;

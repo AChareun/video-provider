@@ -1,10 +1,10 @@
 import { Application, query, Request, Response } from 'express';
 
 import { AbstractController } from '../../abstractController';
+import { Title } from '../entity/title';
 import { TitleService } from '../module';
 
 export class TitleController extends AbstractController {
-
     BASE_ROUTE: string = '/title';
     titleService: TitleService;
 
@@ -16,6 +16,7 @@ export class TitleController extends AbstractController {
     configureRoutes(app: Application): void {
         const { BASE_ROUTE } = this;
         app.get(`${BASE_ROUTE}`, this.getPaginated.bind(this));
+        app.post(`${BASE_ROUTE}`, this.postTitle.bind(this));
         app.get(`${BASE_ROUTE}/:titleId`, this.getById.bind(this));
     }
 
@@ -33,7 +34,7 @@ export class TitleController extends AbstractController {
     }
 
     async getById(req: Request, res: Response): Promise<void> {
-        let title: any
+        let title: any;
         const { titleId: id } = req.params;
 
         if (typeof id === 'string') {
@@ -43,4 +44,16 @@ export class TitleController extends AbstractController {
 
         res.send(title);
     }
-};
+
+    async postTitle(req: Request, res: Response): Promise<void> {
+        const titleData = req.body;
+
+        try {
+            this.titleService.addTitle(titleData);
+        } catch (error) {
+            console.log(error);
+        }
+
+        res.send('OK!');
+    }
+}

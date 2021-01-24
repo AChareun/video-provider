@@ -16,4 +16,8 @@ export class TitleService {
     async getById(id: number): Promise<Title> {
         return this.titleRepository.getById(id);
     }
+
+    async addTitle(data: Title): Promise<Title> {
+        return this.titleRepository.addTitle(data);
+    }
 }

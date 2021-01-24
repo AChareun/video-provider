@@ -14,7 +14,6 @@ export class TitleRepository extends AbstractTitleRepository {
     }
 
     async getPaginated(limit: number, offset: number): Promise<Array<Title>> {
-        // @ts-ignore
         const titles: Array<Object> = await this.titleModel.findAll({ limit, offset });
         return titles.map(fromModelToEntity);
     }
@@ -30,7 +29,6 @@ export class TitleRepository extends AbstractTitleRepository {
         let title;
 
         try {
-            // @ts-ignore
             title = await this.titleModel.findByPk(id);
         } catch (error) {
             console.log(error);
@@ -41,5 +39,16 @@ export class TitleRepository extends AbstractTitleRepository {
         }
 
         return fromModelToEntity(title);
+    }
+
+    async addTitle(data: Title): Promise<Title> {
+        const newTitle = this.titleModel.build(data);
+        try {
+            await newTitle.save();
+        } catch (error) {
+            console.log(error);
+        }
+
+        return fromModelToEntity(newTitle);
     }
 };
