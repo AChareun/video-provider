@@ -2,11 +2,14 @@
     "compilerOptions": {
         "outDir": "./built",
         "allowJs": true,
-        "target": "es6",
+        "target": "ES6",
+        "module": "commonjs",
         "noImplicitAny": true,
         "strictNullChecks": true,
         "noEmitOnError": true,
-        "moduleResolution": "node",
+        "moduleResolution": "node"
     },
-    "include": ["./src/**/*"]
+    "moduleResolution": "node",
+    "include": ["./src/**/*"],
+    "exclude": ["**/*.test.ts"]
 }
