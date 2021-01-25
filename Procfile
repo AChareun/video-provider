@@ -1,0 +1,1 @@
+web: npx tsc && npm run db:sync && npm start
