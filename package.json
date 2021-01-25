@@ -34,8 +34,7 @@
         "jsdoc": "^3.6.6",
         "nodemon": "^2.0.6",
         "prettier": "^2.2.1",
-        "ts-jest": "^26.4.4",
-        "typescript": "^4.1.3"
+        "ts-jest": "^26.4.4"
     },
     "dependencies": {
         "cors": "^2.8.5",
@@ -45,6 +44,7 @@
         "rsdi": "^1.0.10",
         "sequelize": "^6.3.5",
         "sequelize-cli": "^6.2.0",
-        "sqlite3": "^5.0.0"
+        "sqlite3": "^5.0.0",
+        "typescript": "^4.1.3"
     }
 }
