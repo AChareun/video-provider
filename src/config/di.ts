@@ -1,6 +1,7 @@
 import { default as DIContainer, factory, object, get } from 'rsdi';
 import { Sequelize } from 'sequelize';
 
+import { ApiResponseHelper } from '../lib/apiResponse';
 import { TitleController, TitleService, TitleRepository, TitleModel } from '../module/title/module';
 
 function configureSequelizeDatabase(): Sequelize {
@@ -12,6 +13,7 @@ function configureSequelizeDatabase(): Sequelize {
 function addCommonDefinitions(container: DIContainer): void {
     container.addDefinitions({
         Sequelize: factory(configureSequelizeDatabase),
+        ResponseHelper: object(ApiResponseHelper).construct([]),
     });
 }
 
@@ -26,7 +28,7 @@ function addTitleModuleDefinitions(container: DIContainer): void {
         TitleModel: factory(configureTitleModel),
         TitleRepository: object(TitleRepository).construct(get('TitleModel')),
         TitleService: object(TitleService).construct(get('TitleRepository')),
-        TitleController: object(TitleController).construct(get('TitleService')),
+        TitleController: object(TitleController).construct(get('TitleService'), get('ResponseHelper')),
     });
 }
 
