@@ -107,4 +107,4 @@ dist
 data/
 
 # Compiled build
-built
+dist
