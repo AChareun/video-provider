@@ -4,7 +4,7 @@ import { Sequelize } from 'sequelize';
 import { TitleController, TitleService, TitleRepository, TitleModel } from '../module/title/module';
 
 function configureSequelizeDatabase(): Sequelize {
-    const sequelize = new Sequelize(`postgres:${process.env.DATABASE_URL}`)
+    const sequelize = new Sequelize(`${process.env.DATABASE_URL}`);
 
     return sequelize;
 }
