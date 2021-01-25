@@ -1,5 +1,6 @@
 import { Application, query, Request, Response } from 'express';
 
+import { ApiResponseHelper } from '../../../lib/apiResponse';
 import { AbstractController } from '../../abstractController';
 import { Title } from '../entity/title';
 import { TitleService } from '../module';
@@ -7,10 +8,12 @@ import { TitleService } from '../module';
 export class TitleController extends AbstractController {
     BASE_ROUTE: string = '/title';
     titleService: TitleService;
+    responseHelper: ApiResponseHelper;
 
-    constructor(titleService: TitleService) {
+    constructor(titleService: TitleService, responseHelper: ApiResponseHelper) {
         super();
         this.titleService = titleService;
+        this.responseHelper = responseHelper;
     }
 
     configureRoutes(app: Application): void {
@@ -30,7 +33,9 @@ export class TitleController extends AbstractController {
             titles = await this.titleService.getPaginated(limitInt, offsetInt);
         }
 
-        res.send(titles);
+        const apiResponse = this.responseHelper.buildOkResponse(titles);
+
+        res.json(apiResponse);
     }
 
     async getById(req: Request, res: Response): Promise<void> {
@@ -42,7 +47,9 @@ export class TitleController extends AbstractController {
             title = await this.titleService.getById(idInt);
         }
 
-        res.send(title);
+        const apiResponse = this.responseHelper.buildOkResponse(title);
+
+        res.json(apiResponse);
     }
 
     async postTitle(req: Request, res: Response): Promise<void> {
@@ -54,6 +61,8 @@ export class TitleController extends AbstractController {
             console.log(error);
         }
 
-        res.send('OK!');
+        const apiResponse = this.responseHelper.buildOkResponse()
+
+        res.json(apiResponse);
     }
 }
