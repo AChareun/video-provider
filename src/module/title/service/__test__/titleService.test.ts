@@ -20,6 +20,11 @@ test('TitleService method getById should call correct TitleRepository method ', 
 
     expect(repositoryMock.getById).toHaveBeenCalledTimes(1);
     expect(repositoryMock.getById).toHaveBeenCalledWith(1);
+
+    testService.getById([1, 2, 3, 4]);
+
+    expect(repositoryMock.getById).toHaveBeenCalledTimes(2);
+    expect(repositoryMock.getById).toHaveBeenCalledWith([1, 2, 3, 4]);
 });
 
 test('TitleService method addTitle should call correct TitleRepository method', () => {

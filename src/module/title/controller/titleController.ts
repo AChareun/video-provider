@@ -2,7 +2,6 @@ import { Application, query, Request, Response } from 'express';
 
 import { ApiResponseHelper } from '../../../lib/apiResponse';
 import { AbstractController } from '../../abstractController';
-import { Title } from '../entity/title';
 import { TitleService } from '../module';
 
 export class TitleController extends AbstractController {
@@ -18,9 +17,30 @@ export class TitleController extends AbstractController {
 
     configureRoutes(app: Application): void {
         const { BASE_ROUTE } = this;
-        app.get(`${BASE_ROUTE}`, this.getPaginated.bind(this));
+        app.get(`${BASE_ROUTE}`, this.getTitles.bind(this));
         app.post(`${BASE_ROUTE}`, this.postTitle.bind(this));
         app.get(`${BASE_ROUTE}/:titleId`, this.getById.bind(this));
+    }
+
+    async getTitles(req: Request, res: Response): Promise<void> {
+        if (req.query.limit && req.query.offset) {
+            return this.getPaginated(req, res);
+        }
+
+        if (req.query.titleIds) {
+            const queryParam = String(req.query.titleIds);
+            const titleIds = queryParam.split(',').map((id) => parseInt(id));
+
+            const titles = await this.titleService.getById(titleIds);
+            const apiResponse = this.responseHelper.buildOkResponse(titles);
+
+            res.json(apiResponse);
+
+            return
+        }
+
+        const apiResponse = this.responseHelper.buildErrorResponse(430, 'Wrong query parameter');
+        res.json(apiResponse);
     }
 
     async getPaginated(req: Request, res: Response): Promise<void> {

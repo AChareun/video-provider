@@ -13,7 +13,9 @@ export class TitleService {
         return this.titleRepository.getPaginated(limit, offset);
     }
 
-    async getById(id: number): Promise<Title> {
+    async getById(ids: number[]): Promise<Title[]>
+    async getById(id: number): Promise<Title>
+    async getById(id: any): Promise<any> {
         return this.titleRepository.getById(id);
     }
 

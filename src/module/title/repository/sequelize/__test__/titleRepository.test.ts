@@ -59,7 +59,7 @@ test('Trying to get a non-existing Title throws a specific error', async () => {
     }
 });
 
-test('Method getById returns the correct Title', async () => {
+test('Calling method getById with a number returns a single title with the right id', async () => {
     const title1 = await insertTitle();
     const title2 = await insertTitle();
     const title3 = await insertTitle();
@@ -69,6 +69,15 @@ test('Method getById returns the correct Title', async () => {
     await expect(testRepo.getById(2)).resolves.toEqual(title2);
     await expect(testRepo.getById(3)).resolves.toEqual(title3);
     await expect(testRepo.getById(4)).resolves.toEqual(title4);
+});
+
+test('Calling method getById with an array of number returns the requested titles', async () => {
+    const title1 = await insertTitle();
+    const title2 = await insertTitle();
+    const title3 = await insertTitle();
+    const title4 = await insertTitle();
+
+    await expect(testRepo.getById([1, 4])).resolves.toEqual([title1, title4]);
 });
 
 test('Method getPaginated returns correct amount of titles', async () => {

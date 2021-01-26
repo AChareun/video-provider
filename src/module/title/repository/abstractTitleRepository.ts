@@ -5,6 +5,7 @@ export abstract class AbstractTitleRepository {
 
     // abstract searchBy(): Promise<Array<Title>> TODO
 
+    abstract getById(id: number[]): Promise<Title[]>
     abstract getById(id: number): Promise<Title>
 
     abstract addTitle(data: Title): Promise<Title>

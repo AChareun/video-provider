@@ -39,6 +39,7 @@ const responseHelperMock = {
 
 const resJsonMock = jest.fn();
 
+// @ts-expect-error
 const testController = new TitleController(serviceMock, responseHelperMock);
 
 beforeEach((): void => {
@@ -46,7 +47,7 @@ beforeEach((): void => {
 });
 
 test('getPaginated method should call corresponding service method', async () => {
-    // @ts-ignore
+    // @ts-expect-error
     await testController.getPaginated({ query: { limit: '1', offset: '0' } }, { json: resJsonMock });
 
     expect(serviceMock.getPaginated).toHaveBeenCalledTimes(1);
@@ -54,7 +55,7 @@ test('getPaginated method should call corresponding service method', async () =>
 });
 
 test('getById method should call corresponding service method and call send with resolve', async () => {
-    // @ts-ignore
+    // @ts-expect-error
     await testController.getById({ params: { titleId: '1' } }, { json: resJsonMock });
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(1);
@@ -62,29 +63,50 @@ test('getById method should call corresponding service method and call send with
 });
 
 test('postTitle method should call corresponding service method and call send with resolve', async () => {
-    // @ts-ignore
+    // @ts-expect-error
     await testController.postTitle({ body: titleMock }, { json: resJsonMock });
 
     expect(serviceMock.addTitle).toHaveBeenCalledTimes(1);
     expect(serviceMock.addTitle).toHaveBeenCalledWith(titleMock);
 });
 
+test('getTitles method should call corresponding service method depending on query props', async () => {
+    // @ts-expect-error
+    await testController.getTitles({ query: { limit: '1', offset: '0' } }, { json: resJsonMock });
+
+    expect(serviceMock.getPaginated).toHaveBeenCalledTimes(1);
+    expect(serviceMock.getPaginated).toHaveBeenCalledWith(1, 0);
+
+    // @ts-expect-error
+    await testController.getTitles({ query: { titleIds: '1, 2, 3, 4' } }, { json: resJsonMock });
+
+    expect(serviceMock.getById).toHaveBeenCalledTimes(1);
+    expect(serviceMock.getById).toHaveBeenCalledWith([1, 2, 3, 4]);
+});
+
+
 test('controller methods successfully call res.json method with response from responseHelper', async () => {
-    // @ts-ignore
+    // @ts-expect-error
     await testController.getPaginated({ query: { limit: '1', offset: '0' } }, { json: resJsonMock });
 
     expect(responseHelperMock.buildOkResponse).toHaveBeenCalledTimes(1);
     expect(resJsonMock).toHaveBeenCalledWith(responseMock);
 
-    // @ts-ignore
+    // @ts-expect-error
     await testController.getById({ params: { titleId: '1' } }, { json: resJsonMock });
 
     expect(responseHelperMock.buildOkResponse).toHaveBeenCalledTimes(2);
     expect(resJsonMock).toHaveBeenCalledWith(responseMock);
 
-    // @ts-ignore
+    // @ts-expect-error
     await testController.postTitle({ body: titleMock }, { json: resJsonMock });
 
     expect(responseHelperMock.buildOkResponse).toHaveBeenCalledTimes(3);
+    expect(resJsonMock).toHaveBeenCalledWith(responseMock);
+
+    // @ts-expect-error
+    await testController.getTitles({ query: { titleIds: '1, 2, 3, 4' } }, { json: resJsonMock });
+
+    expect(responseHelperMock.buildOkResponse).toHaveBeenCalledTimes(4);
     expect(resJsonMock).toHaveBeenCalledWith(responseMock);
 });
