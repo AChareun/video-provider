@@ -53,7 +53,7 @@ export class TitleModel
                     type: DataTypes.INTEGER,
                 },
                 sourceImage: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.STRING,
                 },
                 premiereDate: {
                     type: DataTypes.DATE,
