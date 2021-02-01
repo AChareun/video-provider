@@ -10,6 +10,8 @@
         "start": "node dist/bin/www.js",
         "postinstall": "tsc && npm run db:sync",
         "db:sync": "node dist/cli/init.db.js",
+        "db:sync:force": "node dist/cli/force-sync.db.js",
+        "db:seed": "node dist/cli/seed.db.js",
         "dev": "nodemon dist/bin/www.js",
         "test": "jest --collect-coverage",
         "test:dev": "jest --watch"

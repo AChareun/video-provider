@@ -8,6 +8,6 @@ const diContainer = configureDI();
 const mainDb: Sequelize = diContainer.get('Sequelize');
 diContainer.get('TitleModel');
 
-mainDb.sync().catch((error) => {
-    console.log(error)
+mainDb.sync({ force: true }).catch((error) => {
+    console.log(error);
 });
