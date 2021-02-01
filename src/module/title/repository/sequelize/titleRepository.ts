@@ -56,7 +56,7 @@ export class TitleRepository extends AbstractTitleRepository {
         }
     }
 
-    async addTitle(data: Title): Promise<Title> {
+    async addTitle(data: any): Promise<Title> {
         const newTitle = this.titleModel.build(data);
         try {
             await newTitle.save();
