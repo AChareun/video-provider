@@ -39,7 +39,7 @@ export class TitleController extends AbstractController {
             return
         }
 
-        const apiResponse = this.responseHelper.buildErrorResponse(430, 'Wrong query parameter');
+        const apiResponse = this.responseHelper.buildErrorResponse("WRONG_QUERY_PARAM");
         res.json(apiResponse);
     }
 
@@ -76,7 +76,7 @@ export class TitleController extends AbstractController {
         const titleData = req.body;
 
         try {
-            this.titleService.addTitle(titleData);
+            await this.titleService.addTitle(titleData);
         } catch (error) {
             console.log(error);
         }
