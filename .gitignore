@@ -108,3 +108,6 @@ data/
 
 # Compiled build
 dist
+
+# WebStorm
+.idea
