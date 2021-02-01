@@ -1,6 +1,6 @@
 import { Application, query, Request, Response } from 'express';
 
-import { ApiResponseHelper } from '../../../lib/apiResponse';
+import { ApiResponseHelper, IApiResponse } from '../../../lib/apiResponse';
 import { AbstractController } from '../../abstractController';
 import { TitleService } from '../module';
 
@@ -27,47 +27,57 @@ export class TitleController extends AbstractController {
             return this.getPaginated(req, res);
         }
 
+        let apiResponse: IApiResponse;
         if (req.query.titleIds) {
             const queryParam = String(req.query.titleIds);
             const titleIds = queryParam.split(',').map((id) => parseInt(id));
 
-            const titles = await this.titleService.getById(titleIds);
-            const apiResponse = this.responseHelper.buildOkResponse(titles);
-
-            res.json(apiResponse);
-
-            return
+            try {
+                const titles = await this.titleService.getById(titleIds);
+                apiResponse = this.responseHelper.buildOkResponse(titles);
+            } catch (error) {
+                apiResponse = this.responseHelper.buildErrorResponse(error.name);
+            }
+        } else {
+            apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
         }
 
-        const apiResponse = this.responseHelper.buildErrorResponse("WRONG_QUERY_PARAM");
         res.json(apiResponse);
     }
 
     async getPaginated(req: Request, res: Response): Promise<void> {
         const { limit, offset } = req.query;
-        let titles: any;
 
+        let apiResponse: IApiResponse;
         if (typeof limit === 'string' && typeof offset === 'string') {
-            const limitInt = parseInt(limit);
-            const offsetInt = parseInt(offset);
-            titles = await this.titleService.getPaginated(limitInt, offsetInt);
+            try {
+                const [limitInt, offsetInt] = [parseInt(limit), parseInt(offset)];
+                const titles = await this.titleService.getPaginated(limitInt, offsetInt);
+                apiResponse = this.responseHelper.buildOkResponse(titles);
+            } catch (error) {
+                apiResponse = this.responseHelper.buildErrorResponse(error.name);
+            }
+        } else {
+            apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
         }
-
-        const apiResponse = this.responseHelper.buildOkResponse(titles);
 
         res.json(apiResponse);
     }
 
     async getById(req: Request, res: Response): Promise<void> {
-        let title: any;
+        let apiResponse: IApiResponse;
         const { titleId: id } = req.params;
-
-        if (typeof id === 'string') {
-            const idInt = parseInt(id);
-            title = await this.titleService.getById(idInt);
+        if (id || id === '0') {
+            try {
+                const title = await this.titleService.getById(parseInt(id));
+                apiResponse = this.responseHelper.buildOkResponse([title]);
+            } catch (error) {
+                apiResponse = this.responseHelper.buildErrorResponse(error.name);
+            }
+        } else {
+            apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
+            res.json(apiResponse);
         }
-
-        const apiResponse = this.responseHelper.buildOkResponse(title);
 
         res.json(apiResponse);
     }
@@ -81,7 +91,7 @@ export class TitleController extends AbstractController {
             console.log(error);
         }
 
-        const apiResponse = this.responseHelper.buildOkResponse()
+        const apiResponse = this.responseHelper.buildOkResponse();
 
         res.json(apiResponse);
     }

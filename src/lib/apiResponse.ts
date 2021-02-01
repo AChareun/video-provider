@@ -1,6 +1,6 @@
 import { ApiErrors } from '../core/apiError';
 
-interface IApiResponse {
+export interface IApiResponse {
     status: string;
     code: number;
     message: string;
