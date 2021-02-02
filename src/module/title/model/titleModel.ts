@@ -11,7 +11,7 @@ interface TitleAttributes {
     trailerUrl: string | undefined;
 }
 
-interface TitleCreationAttributes extends Optional<TitleAttributes, 'id'> {}
+export interface TitleCreationAttributes extends Optional<TitleAttributes, 'id'> {}
 
 export class TitleModel
     extends Model<TitleAttributes, TitleCreationAttributes>
