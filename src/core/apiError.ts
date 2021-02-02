@@ -1,6 +1,6 @@
 import { WrongQueryParamError } from '../module/error/wrongQueryParamError';
 import { ResourceNotFoundError } from '../module/error/resourceNotFoundError';
-import { GenericDatabaseError } from '../module/title/repository/error/genericDatabaseError';
+import { GenericDatabaseError } from '../module/error/genericDatabaseError';
 
 export interface IApiError {
     name: string;
