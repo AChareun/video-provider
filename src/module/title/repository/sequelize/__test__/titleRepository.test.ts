@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 
 import { TitleRepository } from '../titleRepository';
-import { TitleNotFoundError } from '../../error/titleNotFoundError';
+import { TitleNotFoundError } from '../../../../error/resourceNotFoundError';
 import { TitleModel } from '../../../model/titleModel';
 import { Title } from '../../../entity/title';
 import { fromModelToEntity } from '../../../mapper/titleMapper';

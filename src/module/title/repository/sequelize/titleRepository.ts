@@ -1,9 +1,10 @@
 import { AbstractTitleRepository } from '../abstractTitleRepository';
-import { TitleNotFoundError } from '../error/titleNotFoundError';
+import { ResourceNotFoundError } from '../../../error/resourceNotFoundError';
 import { fromModelToEntity } from '../../mapper/titleMapper';
 import { TitleModel } from '../../model/titleModel';
 import { Title } from '../../entity/title';
-import { Op } from 'sequelize';
+import { DatabaseError, Op } from 'sequelize';
+import { GenericDatabaseError } from '../error/genericDatabaseError';
 
 export class TitleRepository extends AbstractTitleRepository {
     titleModel: typeof TitleModel;
@@ -13,9 +14,18 @@ export class TitleRepository extends AbstractTitleRepository {
         this.titleModel = titleModel;
     }
 
-    async getPaginated(limit: number, offset: number): Promise<Array<Title>> {
-        const titles: Array<Object> = await this.titleModel.findAll({ limit, offset });
-        return titles.map(fromModelToEntity);
+    async getPaginated(limit: number, offset: number): Promise<Title[]> {
+        try {
+            const titles: TitleModel[] = await this.titleModel.findAll({ limit, offset });
+            return titles.map(fromModelToEntity);
+        } catch (error) {
+            console.log('Error log: ', error);
+            if (error instanceof DatabaseError) {
+                console.log('SQL Error Parameters: ', error.parameters);
+                console.log('SQL Error Query: ', error.sql);
+            }
+            throw error;
+        }
     }
 
     // /**
@@ -32,10 +42,15 @@ export class TitleRepository extends AbstractTitleRepository {
             let titles: any[] = [];
 
             try {
-                const { in: opIn } = Op
+                const { in: opIn } = Op;
                 titles = await this.titleModel.findAll({ where: { id: { [opIn]: id } } });
             } catch (error) {
-                console.log(error);
+                console.log('Error log: ', error);
+                if (error instanceof DatabaseError) {
+                    console.log('SQL Error Parameters: ', error.parameters);
+                    console.log('SQL Error Query: ', error.sql);
+                }
+                throw error;
             }
 
             return titles.map(fromModelToEntity);
@@ -45,11 +60,17 @@ export class TitleRepository extends AbstractTitleRepository {
             try {
                 title = await this.titleModel.findByPk(id);
             } catch (error) {
-                console.log(error);
+                console.log('Error log: ', error);
+                if (error instanceof DatabaseError) {
+                    console.log('SQL Error Parameters: ', error.parameters);
+                    console.log('SQL Error Query: ', error.sql);
+                    throw new GenericDatabaseError();
+                }
+                throw error;
             }
 
             if (!title) {
-                throw new TitleNotFoundError();
+                throw new ResourceNotFoundError();
             }
 
             return fromModelToEntity(title);
@@ -61,7 +82,13 @@ export class TitleRepository extends AbstractTitleRepository {
         try {
             await newTitle.save();
         } catch (error) {
-            console.log(error);
+            console.log('Error log: ', error);
+            if (error instanceof DatabaseError) {
+                console.log('SQL Error Parameters: ', error.parameters);
+                console.log('SQL Error Query: ', error.sql);
+                throw new GenericDatabaseError();
+            }
+            throw error;
         }
 
         return fromModelToEntity(newTitle);
