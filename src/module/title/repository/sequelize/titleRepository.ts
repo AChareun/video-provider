@@ -4,7 +4,7 @@ import { fromModelToEntity } from '../../mapper/titleMapper';
 import { TitleModel } from '../../model/titleModel';
 import { Title } from '../../entity/title';
 import { DatabaseError, Op } from 'sequelize';
-import { GenericDatabaseError } from '../error/genericDatabaseError';
+import { GenericDatabaseError } from '../../../error/genericDatabaseError';
 
 export class TitleRepository extends AbstractTitleRepository {
     titleModel: typeof TitleModel;
