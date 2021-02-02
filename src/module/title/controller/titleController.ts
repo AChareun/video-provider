@@ -1,6 +1,6 @@
 import { Application, query, Request, Response } from 'express';
 
-import { ApiResponseHelper } from '../../../lib/apiResponse';
+import { ApiResponseHelper, IApiResponse } from '../../../lib/apiResponse';
 import { AbstractController } from '../../abstractController';
 import { TitleService } from '../module';
 
@@ -27,62 +27,85 @@ export class TitleController extends AbstractController {
             return this.getPaginated(req, res);
         }
 
+        let apiResponse: IApiResponse;
         if (req.query.titleIds) {
             const queryParam = String(req.query.titleIds);
             const titleIds = queryParam.split(',').map((id) => parseInt(id));
 
-            const titles = await this.titleService.getById(titleIds);
-            const apiResponse = this.responseHelper.buildOkResponse(titles);
-
-            res.json(apiResponse);
-
+            try {
+                const titles = await this.titleService.getById(titleIds);
+                apiResponse = this.responseHelper.buildOkResponse(titles);
+            } catch (error) {
+                apiResponse = this.responseHelper.buildErrorResponse(error.name);
+                res.status(400).json(apiResponse);
+                return
+            }
+        } else {
+            apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
+            res.status(400).json(apiResponse);
             return
         }
 
-        const apiResponse = this.responseHelper.buildErrorResponse(430, 'Wrong query parameter');
-        res.json(apiResponse);
+        res.status(200).json(apiResponse);
     }
 
     async getPaginated(req: Request, res: Response): Promise<void> {
         const { limit, offset } = req.query;
-        let titles: any;
 
+        let apiResponse: IApiResponse;
         if (typeof limit === 'string' && typeof offset === 'string') {
-            const limitInt = parseInt(limit);
-            const offsetInt = parseInt(offset);
-            titles = await this.titleService.getPaginated(limitInt, offsetInt);
+            try {
+                const [limitInt, offsetInt] = [parseInt(limit), parseInt(offset)];
+                const titles = await this.titleService.getPaginated(limitInt, offsetInt);
+                apiResponse = this.responseHelper.buildOkResponse(titles);
+            } catch (error) {
+                apiResponse = this.responseHelper.buildErrorResponse(error.name);
+                res.status(400).json(apiResponse);
+                return
+            }
+        } else {
+            apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
+            res.status(400).json(apiResponse);
+            return
         }
 
-        const apiResponse = this.responseHelper.buildOkResponse(titles);
-
-        res.json(apiResponse);
+        res.status(200).json(apiResponse);
     }
 
     async getById(req: Request, res: Response): Promise<void> {
-        let title: any;
+        let apiResponse: IApiResponse;
         const { titleId: id } = req.params;
-
-        if (typeof id === 'string') {
-            const idInt = parseInt(id);
-            title = await this.titleService.getById(idInt);
+        if (id || id === '0') {
+            try {
+                const title = await this.titleService.getById(parseInt(id));
+                apiResponse = this.responseHelper.buildOkResponse([title]);
+            } catch (error) {
+                apiResponse = this.responseHelper.buildErrorResponse(error.name);
+                res.status(400).json(apiResponse);
+                return
+            }
+        } else {
+            apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
+            res.status(400).json(apiResponse);
+            return
         }
 
-        const apiResponse = this.responseHelper.buildOkResponse(title);
-
-        res.json(apiResponse);
+        res.status(200).json(apiResponse);
     }
 
     async postTitle(req: Request, res: Response): Promise<void> {
         const titleData = req.body;
+        let apiResponse: IApiResponse;
 
         try {
-            this.titleService.addTitle(titleData);
+            await this.titleService.addTitle(titleData);
+            apiResponse = this.responseHelper.buildOkResponse();
         } catch (error) {
             console.log(error);
+            apiResponse = this.responseHelper.buildErrorResponse(error.name);
+            res.status(400).json(apiResponse);
         }
 
-        const apiResponse = this.responseHelper.buildOkResponse()
-
-        res.json(apiResponse);
+        res.status(200).json(apiResponse);
     }
 }

@@ -1,4 +1,6 @@
-interface IApiReponse {
+import { ApiErrors } from '../core/apiError';
+
+export interface IApiResponse {
     status: string;
     code: number;
     message: string;
@@ -12,7 +14,7 @@ export class ApiResponseHelper {
         this.apiErrors = apiErrors;
     }
 
-    buildOkResponse(data?: any[]): IApiReponse {
+    buildOkResponse(data?: any[]): IApiResponse {
         return {
             status: 'OK',
             code: 200,
@@ -21,11 +23,13 @@ export class ApiResponseHelper {
         };
     }
 
-    buildErrorResponse(code: number, message: string): IApiReponse {
+    buildErrorResponse(errorName: string): IApiResponse {
+        const apiError = ApiErrors[errorName];
+
         return {
             status: 'ERROR',
-            code,
-            message,
+            code: apiError.code,
+            message: apiError.message,
             data: null,
         };
     }
