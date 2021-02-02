@@ -1,4 +1,4 @@
-import { IApiError } from '../../../../core/apiError';
+import { IApiError } from '../../core/apiError';
 
 export class GenericDatabaseError extends Error implements IApiError {
     name: string = 'DATABASE_ERROR';
