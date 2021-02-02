@@ -37,12 +37,16 @@ export class TitleController extends AbstractController {
                 apiResponse = this.responseHelper.buildOkResponse(titles);
             } catch (error) {
                 apiResponse = this.responseHelper.buildErrorResponse(error.name);
+                res.status(400).json(apiResponse);
+                return
             }
         } else {
             apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
+            res.status(400).json(apiResponse);
+            return
         }
 
-        res.json(apiResponse);
+        res.status(200).json(apiResponse);
     }
 
     async getPaginated(req: Request, res: Response): Promise<void> {
@@ -56,12 +60,16 @@ export class TitleController extends AbstractController {
                 apiResponse = this.responseHelper.buildOkResponse(titles);
             } catch (error) {
                 apiResponse = this.responseHelper.buildErrorResponse(error.name);
+                res.status(400).json(apiResponse);
+                return
             }
         } else {
             apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
+            res.status(400).json(apiResponse);
+            return
         }
 
-        res.json(apiResponse);
+        res.status(200).json(apiResponse);
     }
 
     async getById(req: Request, res: Response): Promise<void> {
@@ -73,26 +81,31 @@ export class TitleController extends AbstractController {
                 apiResponse = this.responseHelper.buildOkResponse([title]);
             } catch (error) {
                 apiResponse = this.responseHelper.buildErrorResponse(error.name);
+                res.status(400).json(apiResponse);
+                return
             }
         } else {
             apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
-            res.json(apiResponse);
+            res.status(400).json(apiResponse);
+            return
         }
 
-        res.json(apiResponse);
+        res.status(200).json(apiResponse);
     }
 
     async postTitle(req: Request, res: Response): Promise<void> {
         const titleData = req.body;
+        let apiResponse: IApiResponse;
 
         try {
             await this.titleService.addTitle(titleData);
+            apiResponse = this.responseHelper.buildOkResponse();
         } catch (error) {
             console.log(error);
+            apiResponse = this.responseHelper.buildErrorResponse(error.name);
+            res.status(400).json(apiResponse);
         }
 
-        const apiResponse = this.responseHelper.buildOkResponse();
-
-        res.json(apiResponse);
+        res.status(200).json(apiResponse);
     }
 }
