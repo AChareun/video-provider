@@ -23,6 +23,7 @@ export class TitleRepository extends AbstractTitleRepository {
             if (error instanceof DatabaseError) {
                 console.log('SQL Error Parameters: ', error.parameters);
                 console.log('SQL Error Query: ', error.sql);
+                throw new GenericDatabaseError();
             }
             throw error;
         }
@@ -49,6 +50,7 @@ export class TitleRepository extends AbstractTitleRepository {
                 if (error instanceof DatabaseError) {
                     console.log('SQL Error Parameters: ', error.parameters);
                     console.log('SQL Error Query: ', error.sql);
+                    throw new GenericDatabaseError();
                 }
                 throw error;
             }
