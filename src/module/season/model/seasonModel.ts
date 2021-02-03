@@ -1,26 +1,29 @@
 import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { TitleModel } from '../../title/model/titleModel';
 
-interface TitleAttributes {
+export interface SeasonAttributes {
     id: number;
-    name: string;
+    titleId: number;
+    seasonNumber: number;
+    name: string | undefined;
     synopsis: string | undefined;
     episodeCount: number | undefined;
-    seasonCount: number | undefined;
     sourceImage: string | undefined;
     premiereDate: Date | undefined;
     trailerUrl: string | undefined;
 }
 
-export interface TitleCreationAttributes extends Optional<TitleAttributes, 'id'> {}
+export interface SeasonCreationAttributes extends Optional<SeasonAttributes, 'id'> {}
 
-export class TitleModel
-    extends Model<TitleAttributes, TitleCreationAttributes>
-    implements TitleAttributes {
+export class SeasonModel
+    extends Model<SeasonAttributes, SeasonCreationAttributes>
+    implements SeasonAttributes {
     id!: number;
-    name!: string;
+    titleId: number;
+    seasonNumber!: number;
+    name!: string | undefined;
     synopsis!: string | undefined;
     episodeCount!: number | undefined;
-    seasonCount!: number | undefined;
     sourceImage!: string | undefined;
     premiereDate!: Date | undefined;
     trailerUrl!: string | undefined;
@@ -30,7 +33,7 @@ export class TitleModel
     readonly deletedAt!: Date;
 
     static setup(sequelizeInstance: Sequelize) {
-        TitleModel.init(
+        SeasonModel.init(
             {
                 id: {
                     type: DataTypes.BIGINT,
@@ -38,6 +41,17 @@ export class TitleModel
                     allowNull: false,
                     primaryKey: true,
                     unique: true,
+                },
+                titleId: {
+                    type: DataTypes.INTEGER,
+                    references: {
+                        model: 'Titles',
+                        key: 'id',
+                    },
+                },
+                seasonNumber: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false,
                 },
                 name: {
                     type: DataTypes.STRING,
@@ -47,9 +61,6 @@ export class TitleModel
                     type: DataTypes.STRING,
                 },
                 episodeCount: {
-                    type: DataTypes.INTEGER,
-                },
-                seasonCount: {
                     type: DataTypes.INTEGER,
                 },
                 sourceImage: {
@@ -64,12 +75,16 @@ export class TitleModel
             },
             {
                 sequelize: sequelizeInstance,
-                modelName: 'Title',
+                modelName: 'Season',
                 timestamps: true,
                 paranoid: true,
             }
         );
 
-        return TitleModel;
+        return SeasonModel;
+    }
+
+    static setupAssociations(titleModel: typeof TitleModel) {
+        SeasonModel.belongsTo(titleModel, { foreignKey: 'titleId' });
     }
 }

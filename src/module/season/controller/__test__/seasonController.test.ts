@@ -1,26 +1,27 @@
-import { TitleController } from '../titleController';
-import { Title } from '../../entity/title';
+import { SeasonController } from '../seasonController';
+import { Season } from '../../entity/season';
 
-const titleMock = new Title({
+const seasonMock = new Season({
+    episodeCount: 10,
     id: 1,
-    name: 'name',
-    synopsis: 'synopsis',
-    episodeCount: 1,
-    seasonCount: 1,
-    sourceImage: 'url',
+    name: 'Name',
+    number: 1,
     premiereDate: new Date(),
-    trailerUrl: 'url',
+    sourceImage: "ImgURL",
+    synopsis: "Synopsis",
+    titleId: 0,
+    trailerUrl: "TrailerUrl"
 });
 
 const serviceMock = {
-    titleRepository: {
-        getPaginated: jest.fn(() => Promise.resolve([titleMock])),
-        getById: jest.fn(() => Promise.resolve(titleMock)),
-        addTitle: jest.fn(() => Promise.resolve(titleMock)),
+    seasonRepository: {
+        getPaginated: jest.fn(() => Promise.resolve([seasonMock])),
+        getById: jest.fn(() => Promise.resolve(seasonMock)),
+        addSeason: jest.fn(() => Promise.resolve(seasonMock)),
     },
-    getPaginated: jest.fn(() => Promise.resolve([titleMock])),
-    getById: jest.fn(() => Promise.resolve(titleMock)),
-    addTitle: jest.fn(() => Promise.resolve(titleMock)),
+    getPaginated: jest.fn(() => Promise.resolve([seasonMock])),
+    getById: jest.fn(() => Promise.resolve(seasonMock)),
+    addSeason: jest.fn(() => Promise.resolve(seasonMock)),
 };
 
 const responseMock = {
@@ -46,7 +47,7 @@ const resMock = (() => {
 })();
 
 // @ts-expect-error
-const testController = new TitleController(serviceMock, responseHelperMock);
+const testController = new SeasonController(serviceMock, responseHelperMock);
 
 beforeEach((): void => {
     jest.clearAllMocks();
@@ -62,33 +63,34 @@ test('getPaginated method should call corresponding service method', async () =>
 
 test('getById method should call corresponding service method and call send with resolve', async () => {
     // @ts-expect-error
-    await testController.getById({ params: { titleId: '1' } }, resMock);
+    await testController.getById({ params: { seasonId: '1' } }, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(1);
     expect(serviceMock.getById).toHaveBeenCalledWith(1);
 });
 
-test('postTitle method should call corresponding service method and call send with resolve', async () => {
+test('postSeason method should call corresponding service method and call send with resolve', async () => {
     // @ts-expect-error
-    await testController.postTitle({ body: titleMock }, resMock);
+    await testController.postSeason({ body: seasonMock }, resMock);
 
-    expect(serviceMock.addTitle).toHaveBeenCalledTimes(1);
-    expect(serviceMock.addTitle).toHaveBeenCalledWith(titleMock);
+    expect(serviceMock.addSeason).toHaveBeenCalledTimes(1);
+    expect(serviceMock.addSeason).toHaveBeenCalledWith(seasonMock);
 });
 
-test('getTitles method should call corresponding service method depending on query props', async () => {
+test('getSeasons method should call corresponding service method depending on query props', async () => {
     // @ts-expect-error
-    await testController.getTitles({ query: { limit: '1', offset: '0' } }, resMock);
+    await testController.getSeasons({ query: { limit: '1', offset: '0' } }, resMock);
 
     expect(serviceMock.getPaginated).toHaveBeenCalledTimes(1);
     expect(serviceMock.getPaginated).toHaveBeenCalledWith(1, 0);
 
     // @ts-expect-error
-    await testController.getTitles({ query: { titleIds: '1, 2, 3, 4' } }, resMock);
+    await testController.getSeasons({ query: { seasonIds: '1, 2, 3, 4' } }, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(1);
     expect(serviceMock.getById).toHaveBeenCalledWith([1, 2, 3, 4]);
 });
+
 
 test('controller methods successfully call res.json method with response from responseHelper', async () => {
     // @ts-expect-error
@@ -98,19 +100,19 @@ test('controller methods successfully call res.json method with response from re
     expect(resMock.json).toHaveBeenCalledWith(responseMock);
 
     // @ts-expect-error
-    await testController.getById({ params: { titleId: '1' } }, resMock);
+    await testController.getById({ params: { seasonId: '1' } }, resMock);
 
     expect(responseHelperMock.buildOkResponse).toHaveBeenCalledTimes(2);
     expect(resMock.json).toHaveBeenCalledWith(responseMock);
 
     // @ts-expect-error
-    await testController.postTitle({ body: titleMock }, resMock);
+    await testController.postSeason({ body: seasonMock }, resMock);
 
     expect(responseHelperMock.buildOkResponse).toHaveBeenCalledTimes(3);
     expect(resMock.json).toHaveBeenCalledWith(responseMock);
 
     // @ts-expect-error
-    await testController.getTitles({ query: { titleIds: '1, 2, 3, 4' } }, resMock);
+    await testController.getSeasons({ query: { seasonIds: '1, 2, 3, 4' } }, resMock);
 
     expect(responseHelperMock.buildOkResponse).toHaveBeenCalledTimes(4);
     expect(resMock.json).toHaveBeenCalledWith(responseMock);

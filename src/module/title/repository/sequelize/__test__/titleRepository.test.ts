@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize';
 
 import { TitleRepository } from '../titleRepository';
-import { TitleNotFoundError } from '../../../../error/resourceNotFoundError';
-import { TitleModel } from '../../../model/titleModel';
+import { ResourceNotFoundError } from '../../../../error/resourceNotFoundError';
+import { TitleCreationAttributes, TitleModel } from '../../../model/titleModel';
 import { Title } from '../../../entity/title';
 import { fromModelToEntity } from '../../../mapper/titleMapper';
 
@@ -18,7 +18,7 @@ let testRepo: TitleRepository;
 
 let titleModel: typeof TitleModel;
 
-const fakeNewTitle = {
+const fakeNewTitle: TitleCreationAttributes = {
     id: undefined,
     name: 'Title',
     synopsis: 'Synopsis',
@@ -55,7 +55,7 @@ test('Trying to get a non-existing Title throws a specific error', async () => {
     try {
         await testRepo.getById(234);
     } catch (error) {
-        expect(error).toBeInstanceOf(TitleNotFoundError);
+        expect(error).toBeInstanceOf(ResourceNotFoundError);
     }
 });
 
