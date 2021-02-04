@@ -4,7 +4,7 @@ import { TitleRepository } from '../titleRepository';
 import { ResourceNotFoundError } from '../../../../error/resourceNotFoundError';
 import { TitleCreationAttributes, TitleModel } from '../../../model/titleModel';
 import { Title } from '../../../entity/title';
-import { fromModelToEntity } from '../../../mapper/titleMapper';
+import { fromModelToEntity, fromEntityToModel } from '../../../mapper/titleMapper';
 import { SeasonCreationAttributes, SeasonModel } from '../../../../season/model/seasonModel';
 import { Season } from '../../../../season/entity/season';
 import { fromModelToEntity as fromModelToEntitySeason } from '../../../../season/mapper/seasonMapper';
@@ -116,7 +116,17 @@ test('Method getPaginated returns correct amount of titles', async () => {
 });
 
 test('Method addTitle correctly saves a new record with id 1', async () => {
-    const newTitle = await testRepo.addTitle(fakeNewTitle);
+    const newTitleMock = new Title({
+        episodeCount: 0,
+        id: undefined,
+        name: '',
+        premiereDate: new Date(),
+        seasonCount: 1,
+        sourceImage: 'undefined',
+        synopsis: 'undefined',
+        trailerUrl: 'undefined'
+    })
+    const newTitle = await testRepo.addTitle(newTitleMock);
 
     await expect(testRepo.getById(1)).resolves.toEqual(newTitle);
 });

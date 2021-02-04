@@ -1,5 +1,4 @@
 import { Episode } from '../entity/episode';
-import { EpisodeCreationAttributes } from '../model/episodeModel';
 
 export abstract class AbstractEpisodeRepository {
     abstract getPaginated(limit: number, offset: number): Promise<Episode[]>;
@@ -9,5 +8,5 @@ export abstract class AbstractEpisodeRepository {
     abstract getById(id: number[]): Promise<Episode[]>;
     abstract getById(id: number): Promise<Episode>;
 
-    abstract addEpisode(data: EpisodeCreationAttributes): Promise<Episode>;
+    abstract addEpisode(data: Episode): Promise<Episode>;
 }

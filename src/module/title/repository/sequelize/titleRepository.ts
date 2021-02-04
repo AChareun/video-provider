@@ -2,8 +2,8 @@ import { DatabaseError, Op } from 'sequelize';
 
 import { AbstractTitleRepository } from '../abstractTitleRepository';
 import { ResourceNotFoundError } from '../../../error/resourceNotFoundError';
-import { fromModelToEntity } from '../../mapper/titleMapper';
-import { TitleModel } from '../../model/titleModel';
+import { fromEntityToModel, fromModelToEntity } from '../../mapper/titleMapper';
+import { TitleCreationAttributes, TitleModel } from '../../model/titleModel';
 import { Title } from '../../entity/title';
 import { GenericDatabaseError } from '../../../error/genericDatabaseError';
 import { Season } from '../../../season/entity/season';
@@ -83,8 +83,8 @@ export class TitleRepository extends AbstractTitleRepository {
         }
     }
 
-    async addTitle(data: any): Promise<Title> {
-        const newTitle = this.titleModel.build(data);
+    async addTitle(data: Title): Promise<Title> {
+        const newTitle = this.titleModel.build(fromEntityToModel(data));
         try {
             await newTitle.save();
         } catch (error) {

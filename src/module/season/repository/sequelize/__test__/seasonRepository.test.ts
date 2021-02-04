@@ -146,7 +146,18 @@ test('Method getPaginated returns correct amount of seasons', async () => {
 });
 
 test('Method addSeason correctly saves a new record with id 1', async () => {
-    const newTitle = await testRepo.addSeason(fakeNewSeason);
+    const mockSeason: Season = {
+        EpisodeCount: 1,
+        PremiereDate: new Date(),
+        SeasonId: undefined,
+        SeasonName: '',
+        SeasonNumber: 0,
+        SeasonSynopsis: 'undefined',
+        SourceImage: 'undefined',
+        TitleId: 1,
+        Trailer: 'undefined'
+    }
+    const newTitle = await testRepo.addSeason(mockSeason);
 
     await expect(testRepo.getById(1)).resolves.toEqual(newTitle);
     expect(newTitle.TitleId).toEqual(1);

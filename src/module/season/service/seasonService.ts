@@ -21,7 +21,7 @@ export class SeasonService {
         return this.seasonRepository.getById(id);
     }
 
-    async addSeason(data: SeasonCreationAttributes): Promise<Season> {
+    async addSeason(data: Season): Promise<Season> {
         return this.seasonRepository.addSeason(data);
     }
 

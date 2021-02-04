@@ -20,8 +20,8 @@ const noDataOkResponseMock = {
 
 const errorResponseMock = {
     status: 'ERROR',
-    code: 400,
-    message: 'Error on request',
+    code: 430,
+    message: 'Wrong query parameter',
     data: null,
 };
 
@@ -32,7 +32,6 @@ test('responseHelper methods should return the right objects for the parameters 
     testResponse = responseHelperTest.buildOkResponse();
     expect(testResponse).toEqual(noDataOkResponseMock);
 
-    testResponse = responseHelperTest.buildErrorResponse(400, 'Error on request');
+    testResponse = responseHelperTest.buildErrorResponse('WRONG_QUERY_PARAM');
     expect(testResponse).toEqual(errorResponseMock);
-})
-
+});

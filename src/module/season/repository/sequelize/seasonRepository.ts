@@ -4,8 +4,9 @@ import { AbstractSeasonRepository } from '../abstractSeasonRepository';
 import { ResourceNotFoundError } from '../../../error/resourceNotFoundError';
 import { GenericDatabaseError } from '../../../error/genericDatabaseError';
 import {
+    fromEntityToModel,
     fromModelToEntity as fromModelToEntitySeason,
-    fromModelToEntity,
+    fromModelToEntity
 } from '../../mapper/seasonMapper';
 import { SeasonCreationAttributes, SeasonModel } from '../../model/seasonModel';
 import { Season } from '../../entity/season';
@@ -94,9 +95,8 @@ export class SeasonRepository extends AbstractSeasonRepository {
         }
     }
 
-    async addSeason(data: SeasonCreationAttributes): Promise<Season> {
-        const newSeason = this.seasonModel.build(data);
-        newSeason.setDataValue('titleId', data.titleId);
+    async addSeason(data: Season): Promise<Season> {
+        const newSeason = this.seasonModel.build(fromEntityToModel(data));
         try {
             await newSeason.save();
         } catch (error) {
