@@ -5,6 +5,7 @@ const repositoryMock = {
     getPaginated: jest.fn(),
     getById: jest.fn(),
     addSeason: jest.fn(),
+    getSeasonEpisodes: jest.fn(),
 };
 
 const testService = new SeasonService(repositoryMock);
@@ -45,4 +46,11 @@ test('SeasonService method addSeason should call correct SeasonRepository method
 
     expect(repositoryMock.addSeason).toHaveBeenCalledTimes(1);
     expect(repositoryMock.addSeason).toHaveBeenCalledWith(mockData);
+});
+
+test('SeasonService method getSeasonEpisodes should call correct SeasonRepository method', () => {
+    testService.getSeasonEpisodes(1);
+
+    expect(repositoryMock.getSeasonEpisodes).toHaveBeenCalledTimes(1);
+    expect(repositoryMock.getById).toHaveBeenCalledWith(1);
 });

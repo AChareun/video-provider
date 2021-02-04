@@ -3,10 +3,16 @@ import { DatabaseError, Op } from 'sequelize';
 import { AbstractSeasonRepository } from '../abstractSeasonRepository';
 import { ResourceNotFoundError } from '../../../error/resourceNotFoundError';
 import { GenericDatabaseError } from '../../../error/genericDatabaseError';
-import { fromModelToEntity } from '../../mapper/seasonMapper';
+import {
+    fromModelToEntity as fromModelToEntitySeason,
+    fromModelToEntity,
+} from '../../mapper/seasonMapper';
 import { SeasonCreationAttributes, SeasonModel } from '../../model/seasonModel';
 import { Season } from '../../entity/season';
 import { TitleModel } from '../../../title/module';
+import { Episode } from '../../../episode/entity/episode';
+import { EpisodeModel } from '../../../episode/model/episodeModel';
+import { fromModelToEntity as fromModelToEntityEpisode } from '../../../episode/mapper/episodeMapper';
 
 export class SeasonRepository extends AbstractSeasonRepository {
     seasonModel: typeof SeasonModel;
@@ -90,10 +96,10 @@ export class SeasonRepository extends AbstractSeasonRepository {
 
     async addSeason(data: SeasonCreationAttributes): Promise<Season> {
         const newSeason = this.seasonModel.build(data);
-        newSeason.setDataValue('titleId', data.titleId)
-        try{
+        newSeason.setDataValue('titleId', data.titleId);
+        try {
             await newSeason.save();
-        }catch (error) {
+        } catch (error) {
             console.log('Error log: ', error);
             if (error instanceof DatabaseError) {
                 console.log('SQL Error Parameters: ', error.parameters);
@@ -104,5 +110,28 @@ export class SeasonRepository extends AbstractSeasonRepository {
         }
 
         return fromModelToEntity(newSeason);
+    }
+
+    async getSeasonEpisodes(id: number): Promise<Episode[]> {
+        let seasonEpisodes: EpisodeModel[];
+
+        try {
+            const season = await this.seasonModel.findByPk(id);
+            if (season) {
+                seasonEpisodes = await season.getEpisodes();
+            } else {
+                throw new ResourceNotFoundError();
+            }
+        } catch (error) {
+            console.log('Error log: ', error);
+            if (error instanceof DatabaseError) {
+                console.log('SQL Error Parameters: ', error.parameters);
+                console.log('SQL Error Query: ', error.sql);
+                throw new GenericDatabaseError();
+            }
+            throw error;
+        }
+
+        return seasonEpisodes.map(fromModelToEntityEpisode);
     }
 }

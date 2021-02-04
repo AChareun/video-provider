@@ -1,6 +1,7 @@
 import { Season } from '../entity/season';
 import { AbstractSeasonRepository } from '../repository/abstractSeasonRepository';
 import { SeasonCreationAttributes } from '../model/seasonModel';
+import { Episode } from '../../episode/entity/episode';
 
 export class SeasonService {
 
@@ -22,5 +23,9 @@ export class SeasonService {
 
     async addSeason(data: SeasonCreationAttributes): Promise<Season> {
         return this.seasonRepository.addSeason(data);
+    }
+
+    async getSeasonEpisodes(id: number): Promise<Episode[]> {
+        return this.seasonRepository.getSeasonEpisodes(id);
     }
 }
