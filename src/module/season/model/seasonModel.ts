@@ -86,5 +86,6 @@ export class SeasonModel
 
     static setupAssociations(titleModel: typeof TitleModel) {
         SeasonModel.belongsTo(titleModel, { foreignKey: 'titleId' });
+        titleModel.hasMany(SeasonModel, { foreignKey: 'titleId' });
     }
 }
