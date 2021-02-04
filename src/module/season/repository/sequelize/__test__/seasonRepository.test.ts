@@ -7,6 +7,9 @@ import { Season } from '../../../entity/season';
 import { fromModelToEntity } from '../../../mapper/seasonMapper';
 import { TitleModel } from '../../../../title/module';
 import { TitleCreationAttributes } from '../../../../title/model/titleModel';
+import { EpisodeCreationAttributes, EpisodeModel } from '../../../../episode/model/episodeModel';
+import { Episode } from '../../../../episode/entity/episode';
+import { fromModelToEntity as fromModelToEntityEpisode } from '../../../../episode/mapper/episodeMapper';
 
 /**
  *
@@ -18,6 +21,7 @@ const testSequelizeInstance = new Sequelize('sqlite::memory:');
 
 let testRepo: SeasonRepository;
 
+let episodeModel: typeof EpisodeModel;
 let seasonModel: typeof SeasonModel;
 let titleModel: typeof TitleModel;
 
@@ -53,10 +57,31 @@ const insertTitle = async (): Promise<void> => {
     await titleModel.create(fakeNewTitle);
 };
 
+const fakeNewEpisode: EpisodeCreationAttributes = {
+    description: 'Description',
+    episodeNumber: 1,
+    id: undefined,
+    introEndTime: 120,
+    introStartTime: 60,
+    length: 620,
+    name: 'Name',
+    outroEndTime: 610,
+    outroStartTime: 580,
+    seasonId: 1,
+    sourcePath: 'videoUrl',
+};
+
+const insertEpisode = async (): Promise<Episode> => {
+    const newEpisode = await episodeModel.create(fakeNewEpisode);
+    return fromModelToEntityEpisode(newEpisode);
+};
+
 beforeAll((): void => {
     titleModel = TitleModel.setup(testSequelizeInstance);
     seasonModel = SeasonModel.setup(testSequelizeInstance);
+    episodeModel = EpisodeModel.setup(testSequelizeInstance);
     seasonModel.setupAssociations(titleModel);
+    episodeModel.setupAssociations(seasonModel);
     testRepo = new SeasonRepository(seasonModel, titleModel);
 });
 
@@ -121,8 +146,31 @@ test('Method getPaginated returns correct amount of seasons', async () => {
 });
 
 test('Method addSeason correctly saves a new record with id 1', async () => {
-    const newTitle = await testRepo.addSeason(fakeNewSeason);
+    const mockSeason: Season = {
+        EpisodeCount: 1,
+        PremiereDate: new Date(),
+        SeasonId: undefined,
+        SeasonName: '',
+        SeasonNumber: 0,
+        SeasonSynopsis: 'undefined',
+        SourceImage: 'undefined',
+        TitleId: 1,
+        Trailer: 'undefined'
+    }
+    const newTitle = await testRepo.addSeason(mockSeason);
 
     await expect(testRepo.getById(1)).resolves.toEqual(newTitle);
     expect(newTitle.TitleId).toEqual(1);
 });
+
+test('Method getSeasonEpisodes returns the episodes associated with the seasonId', async () => {
+    const season1 = await insertSeason();
+    const season2 = await insertSeason();
+
+    const episode1 = await insertEpisode();
+    const episode2 = await insertEpisode();
+
+    await expect(testRepo.getSeasonEpisodes(1)).resolves.toEqual([episode1, episode2]);
+    await expect(testRepo.getSeasonEpisodes(2)).resolves.toEqual([]);
+})
+

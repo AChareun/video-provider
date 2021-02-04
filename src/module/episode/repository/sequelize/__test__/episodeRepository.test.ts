@@ -144,7 +144,20 @@ test('Method getPaginated returns correct amount of episodes', async () => {
 });
 
 test('Method addEpisode correctly saves a new record with id 1', async () => {
-    const newEpisode = await testRepo.addEpisode(fakeNewEpisode);
+    const mockEpisode: Episode = {
+        EpisodeDescription: '',
+        EpisodeId: undefined,
+        EpisodeName: '',
+        EpisodeNumber: 0,
+        IntroEndTime: 1,
+        IntroStartTime: 0,
+        Length: 5,
+        OutroEndTime: 5,
+        OutroStartTime: 4,
+        SeasonId: 1,
+        SourcePath: ''
+    }
+    const newEpisode = await testRepo.addEpisode(mockEpisode);
 
     await expect(testRepo.getById(1)).resolves.toEqual(newEpisode);
     expect(newEpisode.SeasonId).toEqual(1);

@@ -1,5 +1,6 @@
 import { Title } from '../entity/title';
 import { AbstractTitleRepository } from '../repository/abstractTitleRepository';
+import { Season } from '../../season/entity/season';
 
 export class TitleService {
 
@@ -21,5 +22,9 @@ export class TitleService {
 
     async addTitle(data: Title): Promise<Title> {
         return this.titleRepository.addTitle(data);
+    }
+
+    async getTitleSeasons(id: number): Promise<Season[]> {
+        return this.titleRepository.getTitleSeasons(id);
     }
 }

@@ -20,6 +20,7 @@ export class SeasonController extends AbstractController {
         app.get(`${BASE_ROUTE}`, this.getSeasons.bind(this));
         app.post(`${BASE_ROUTE}`, this.postSeason.bind(this));
         app.get(`${BASE_ROUTE}/:seasonId`, this.getById.bind(this));
+        app.get(`${BASE_ROUTE}/:seasonId/episode`, this.getSeasonEpisodes.bind(this));
     }
 
     async getSeasons(req: Request, res: Response): Promise<void> {
@@ -38,12 +39,12 @@ export class SeasonController extends AbstractController {
             } catch (error) {
                 apiResponse = this.responseHelper.buildErrorResponse(error.name);
                 res.status(400).json(apiResponse);
-                return
+                return;
             }
         } else {
             apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
             res.status(400).json(apiResponse);
-            return
+            return;
         }
 
         res.status(200).json(apiResponse);
@@ -61,12 +62,12 @@ export class SeasonController extends AbstractController {
             } catch (error) {
                 apiResponse = this.responseHelper.buildErrorResponse(error.name);
                 res.status(400).json(apiResponse);
-                return
+                return;
             }
         } else {
             apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
             res.status(400).json(apiResponse);
-            return
+            return;
         }
 
         res.status(200).json(apiResponse);
@@ -82,12 +83,12 @@ export class SeasonController extends AbstractController {
             } catch (error) {
                 apiResponse = this.responseHelper.buildErrorResponse(error.name);
                 res.status(400).json(apiResponse);
-                return
+                return;
             }
         } else {
             apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
             res.status(400).json(apiResponse);
-            return
+            return;
         }
 
         res.status(200).json(apiResponse);
@@ -104,6 +105,27 @@ export class SeasonController extends AbstractController {
             console.log(error);
             apiResponse = this.responseHelper.buildErrorResponse(error.name);
             res.status(400).json(apiResponse);
+        }
+
+        res.status(200).json(apiResponse);
+    }
+
+    async getSeasonEpisodes(req: Request, res: Response): Promise<void> {
+        let apiResponse: IApiResponse;
+        const { seasonId: id } = req.params;
+        if (id || id === '0') {
+            try {
+                const seasonEpisodes = await this.seasonService.getSeasonEpisodes(parseInt(id));
+                apiResponse = this.responseHelper.buildOkResponse([seasonEpisodes]);
+            } catch (error) {
+                apiResponse = this.responseHelper.buildErrorResponse(error.name);
+                res.status(400).json(apiResponse);
+                return;
+            }
+        } else {
+            apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
+            res.status(400).json(apiResponse);
+            return;
         }
 
         res.status(200).json(apiResponse);

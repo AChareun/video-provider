@@ -1,9 +1,11 @@
 import { TitleService } from '../titleService';
+import { TitleCreationAttributes } from '../../model/titleModel';
 
 const repositoryMock = {
     getPaginated: jest.fn(),
     getById: jest.fn(),
     addTitle: jest.fn(),
+    getTitleSeasons: jest.fn(),
 };
 
 const testService = new TitleService(repositoryMock);
@@ -28,19 +30,27 @@ test('TitleService method getById should call correct TitleRepository method ', 
 });
 
 test('TitleService method addTitle should call correct TitleRepository method', () => {
-    const mockData = {
+    const mockData: TitleCreationAttributes = {
+        episodeCount: undefined,
         id: undefined,
-        name: 'Title',
-        synopsis: 'Synopsis',
-        episodeCount: 10,
-        seasonCount: 1,
-        sourceImage: 'coverUrl',
-        premiereDate: new Date(),
-        trailerUrl: 'trailerUrl',
+        name: '',
+        premiereDate: undefined,
+        seasonCount: undefined,
+        sourceImage: undefined,
+        synopsis: undefined,
+        trailerUrl: undefined,
     };
 
+    // @ts-expect-error
     testService.addTitle(mockData);
 
     expect(repositoryMock.addTitle).toHaveBeenCalledTimes(1);
     expect(repositoryMock.addTitle).toHaveBeenCalledWith(mockData);
+});
+
+test('TitleService method getTitleSeasons should call correct TitleRepository method', () => {
+    testService.getTitleSeasons(1);
+
+    expect(repositoryMock.getTitleSeasons).toHaveBeenCalledTimes(1);
+    expect(repositoryMock.getById).toHaveBeenCalledWith(1);
 });

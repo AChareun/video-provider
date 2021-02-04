@@ -3,10 +3,17 @@ import { DatabaseError, Op } from 'sequelize';
 import { AbstractSeasonRepository } from '../abstractSeasonRepository';
 import { ResourceNotFoundError } from '../../../error/resourceNotFoundError';
 import { GenericDatabaseError } from '../../../error/genericDatabaseError';
-import { fromModelToEntity } from '../../mapper/seasonMapper';
+import {
+    fromEntityToModel,
+    fromModelToEntity as fromModelToEntitySeason,
+    fromModelToEntity
+} from '../../mapper/seasonMapper';
 import { SeasonCreationAttributes, SeasonModel } from '../../model/seasonModel';
 import { Season } from '../../entity/season';
 import { TitleModel } from '../../../title/module';
+import { Episode } from '../../../episode/entity/episode';
+import { EpisodeModel } from '../../../episode/model/episodeModel';
+import { fromModelToEntity as fromModelToEntityEpisode } from '../../../episode/mapper/episodeMapper';
 
 export class SeasonRepository extends AbstractSeasonRepository {
     seasonModel: typeof SeasonModel;
@@ -23,8 +30,6 @@ export class SeasonRepository extends AbstractSeasonRepository {
             const seasons: SeasonModel[] = await this.seasonModel.findAll({
                 limit,
                 offset,
-                // @ts-expect-error
-                include: this.titleModel,
             });
             return seasons.map(fromModelToEntity);
         } catch (error) {
@@ -55,8 +60,6 @@ export class SeasonRepository extends AbstractSeasonRepository {
                 const { in: opIn } = Op;
                 seasons = await this.seasonModel.findAll({
                     where: { id: { [opIn]: id } },
-                    // @ts-expect-error
-                    include: this.titleModel,
                 });
             } catch (error) {
                 console.log('Error log: ', error);
@@ -73,8 +76,7 @@ export class SeasonRepository extends AbstractSeasonRepository {
             let season;
 
             try {
-                // @ts-expect-error
-                season = await this.seasonModel.findByPk(id, { include: this.titleModel });
+                season = await this.seasonModel.findByPk(id);
             } catch (error) {
                 console.log('Error log: ', error);
                 if (error instanceof DatabaseError) {
@@ -93,14 +95,11 @@ export class SeasonRepository extends AbstractSeasonRepository {
         }
     }
 
-    async addSeason(data: SeasonCreationAttributes): Promise<Season> {
-        const buildOptions = { include: this.titleModel }
-        // @ts-expect-error
-        const newSeason = this.seasonModel.build(data, buildOptions);
-        newSeason.setDataValue('titleId', data.titleId)
-        try{
+    async addSeason(data: Season): Promise<Season> {
+        const newSeason = this.seasonModel.build(fromEntityToModel(data));
+        try {
             await newSeason.save();
-        }catch (error) {
+        } catch (error) {
             console.log('Error log: ', error);
             if (error instanceof DatabaseError) {
                 console.log('SQL Error Parameters: ', error.parameters);
@@ -111,5 +110,28 @@ export class SeasonRepository extends AbstractSeasonRepository {
         }
 
         return fromModelToEntity(newSeason);
+    }
+
+    async getSeasonEpisodes(id: number): Promise<Episode[]> {
+        let seasonEpisodes: EpisodeModel[];
+
+        try {
+            const season = await this.seasonModel.findByPk(id);
+            if (season) {
+                seasonEpisodes = await season.getEpisodes();
+            } else {
+                throw new ResourceNotFoundError();
+            }
+        } catch (error) {
+            console.log('Error log: ', error);
+            if (error instanceof DatabaseError) {
+                console.log('SQL Error Parameters: ', error.parameters);
+                console.log('SQL Error Query: ', error.sql);
+                throw new GenericDatabaseError();
+            }
+            throw error;
+        }
+
+        return seasonEpisodes.map(fromModelToEntityEpisode);
     }
 }

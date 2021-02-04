@@ -3,7 +3,7 @@ import { DatabaseError, Op } from 'sequelize';
 import { AbstractEpisodeRepository } from '../abstractEpisodeRepository';
 import { ResourceNotFoundError } from '../../../error/resourceNotFoundError';
 import { GenericDatabaseError } from '../../../error/genericDatabaseError';
-import { fromModelToEntity } from '../../mapper/episodeMapper';
+import { fromEntityToModel, fromModelToEntity } from '../../mapper/episodeMapper';
 import { EpisodeCreationAttributes, EpisodeModel } from '../../model/episodeModel';
 import { Episode } from '../../entity/episode';
 import { SeasonModel } from '../../../season/module';
@@ -23,8 +23,6 @@ export class EpisodeRepository extends AbstractEpisodeRepository {
             const episodes: EpisodeModel[] = await this.episodeModel.findAll({
                 limit,
                 offset,
-                // @ts-expect-error
-                include: this.seasonModel,
             });
             return episodes.map(fromModelToEntity);
         } catch (error) {
@@ -55,8 +53,6 @@ export class EpisodeRepository extends AbstractEpisodeRepository {
                 const { in: opIn } = Op;
                 episodes = await this.episodeModel.findAll({
                     where: { id: { [opIn]: id } },
-                    // @ts-expect-error
-                    include: this.seasonModel,
                 });
             } catch (error) {
                 console.log('Error log: ', error);
@@ -70,11 +66,10 @@ export class EpisodeRepository extends AbstractEpisodeRepository {
 
             return episodes.map(fromModelToEntity);
         } else {
-            let episode: EpisodeModel;
+            let episode: EpisodeModel | null;
 
             try {
-                // @ts-expect-error
-                episode = await this.episodeModel.findByPk(id, { include: this.seasonModel });
+                episode = await this.episodeModel.findByPk(id);
             } catch (error) {
                 console.log('Error log: ', error);
                 if (error instanceof DatabaseError) {
@@ -93,11 +88,8 @@ export class EpisodeRepository extends AbstractEpisodeRepository {
         }
     }
 
-    async addEpisode(data: EpisodeCreationAttributes): Promise<Episode> {
-        const buildOptions = { include: this.seasonModel }
-        // @ts-expect-error
-        const newEpisode = this.episodeModel.build(data, buildOptions);
-        newEpisode.setDataValue('seasonId', data.seasonId)
+    async addEpisode(data: Episode): Promise<Episode> {
+        const newEpisode = this.episodeModel.build(fromEntityToModel(data));
         try{
             await newEpisode.save();
         }catch (error) {

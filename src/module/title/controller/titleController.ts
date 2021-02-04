@@ -20,6 +20,7 @@ export class TitleController extends AbstractController {
         app.get(`${BASE_ROUTE}`, this.getTitles.bind(this));
         app.post(`${BASE_ROUTE}`, this.postTitle.bind(this));
         app.get(`${BASE_ROUTE}/:titleId`, this.getById.bind(this));
+        app.get(`${BASE_ROUTE}/:titleId/season`, this.getTitleSeasons.bind(this));
     }
 
     async getTitles(req: Request, res: Response): Promise<void> {
@@ -104,6 +105,27 @@ export class TitleController extends AbstractController {
             console.log(error);
             apiResponse = this.responseHelper.buildErrorResponse(error.name);
             res.status(400).json(apiResponse);
+        }
+
+        res.status(200).json(apiResponse);
+    }
+
+    async getTitleSeasons(req: Request, res: Response): Promise<void> {
+        let apiResponse: IApiResponse;
+        const { titleId: id } = req.params;
+        if (id || id === '0') {
+            try {
+                const titleSeasons = await this.titleService.getTitleSeasons(parseInt(id));
+                apiResponse = this.responseHelper.buildOkResponse([titleSeasons]);
+            } catch (error) {
+                apiResponse = this.responseHelper.buildErrorResponse(error.name);
+                res.status(400).json(apiResponse);
+                return
+            }
+        } else {
+            apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
+            res.status(400).json(apiResponse);
+            return
         }
 
         res.status(200).json(apiResponse);

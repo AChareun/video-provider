@@ -20,7 +20,7 @@ export class EpisodeService {
         return this.episodeRepository.getById(id);
     }
 
-    async addEpisode(data: EpisodeCreationAttributes): Promise<Episode> {
+    async addEpisode(data: Episode): Promise<Episode> {
         return this.episodeRepository.addEpisode(data);
     }
 }

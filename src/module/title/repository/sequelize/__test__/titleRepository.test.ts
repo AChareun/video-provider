@@ -4,7 +4,10 @@ import { TitleRepository } from '../titleRepository';
 import { ResourceNotFoundError } from '../../../../error/resourceNotFoundError';
 import { TitleCreationAttributes, TitleModel } from '../../../model/titleModel';
 import { Title } from '../../../entity/title';
-import { fromModelToEntity } from '../../../mapper/titleMapper';
+import { fromModelToEntity, fromEntityToModel } from '../../../mapper/titleMapper';
+import { SeasonCreationAttributes, SeasonModel } from '../../../../season/model/seasonModel';
+import { Season } from '../../../../season/entity/season';
+import { fromModelToEntity as fromModelToEntitySeason } from '../../../../season/mapper/seasonMapper';
 
 /**
  *
@@ -17,6 +20,7 @@ const testSequelizeInstance = new Sequelize('sqlite::memory:');
 let testRepo: TitleRepository;
 
 let titleModel: typeof TitleModel;
+let seasonModel: typeof SeasonModel;
 
 const fakeNewTitle: TitleCreationAttributes = {
     id: undefined,
@@ -34,8 +38,27 @@ const insertTitle = async (): Promise<Title> => {
     return fromModelToEntity(newTitle);
 };
 
+const fakeNewSeason: SeasonCreationAttributes = {
+    episodeCount: 10,
+    id: undefined,
+    name: 'Season Name',
+    premiereDate: new Date(),
+    seasonNumber: 1,
+    sourceImage: 'Source Image',
+    synopsis: 'Synopsis',
+    titleId: 1,
+    trailerUrl: 'Trailer URL',
+};
+
+const insertSeason = async (): Promise<Season> => {
+    const newSeason = await seasonModel.create(fakeNewSeason);
+    return fromModelToEntitySeason(newSeason);
+};
+
 beforeAll((): void => {
     titleModel = TitleModel.setup(testSequelizeInstance);
+    seasonModel = SeasonModel.setup(testSequelizeInstance);
+    seasonModel.setupAssociations(titleModel);
     testRepo = new TitleRepository(titleModel);
 });
 
@@ -93,7 +116,28 @@ test('Method getPaginated returns correct amount of titles', async () => {
 });
 
 test('Method addTitle correctly saves a new record with id 1', async () => {
-    const newTitle = await testRepo.addTitle(fakeNewTitle);
+    const newTitleMock = new Title({
+        episodeCount: 0,
+        id: undefined,
+        name: '',
+        premiereDate: new Date(),
+        seasonCount: 1,
+        sourceImage: 'undefined',
+        synopsis: 'undefined',
+        trailerUrl: 'undefined'
+    })
+    const newTitle = await testRepo.addTitle(newTitleMock);
 
     await expect(testRepo.getById(1)).resolves.toEqual(newTitle);
 });
+
+test('Method getTitleSeasons returns the seasons associated with the titleId', async () => {
+    const title1 = await insertTitle();
+    const title2 = await insertTitle();
+
+    const season1 = await insertSeason();
+    const season2 = await insertSeason();
+
+    await expect(testRepo.getTitleSeasons(1)).resolves.toEqual([season1, season2]);
+    await expect(testRepo.getTitleSeasons(2)).resolves.toEqual([]);
+})
