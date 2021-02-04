@@ -1,4 +1,12 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import {
+    Model,
+    DataTypes,
+    Sequelize,
+    Optional,
+    HasManyGetAssociationsMixin,
+    HasManyAddAssociationMixin, HasManyHasAssociationMixin, HasManyCountAssociationsMixin, HasManyCreateAssociationMixin
+} from 'sequelize';
+import { SeasonModel } from '../../season/model/seasonModel';
 
 interface TitleAttributes {
     id: number;
@@ -28,6 +36,12 @@ export class TitleModel
     readonly createdAt!: Date;
     readonly updatedAt!: Date;
     readonly deletedAt!: Date;
+
+    getSeasons!: HasManyGetAssociationsMixin<SeasonModel>;
+    addSeason!: HasManyAddAssociationMixin<SeasonModel, number>;
+    hasSeason!: HasManyHasAssociationMixin<SeasonModel, number>;
+    countSeasons!: HasManyCountAssociationsMixin;
+    createSeason!: HasManyCreateAssociationMixin<SeasonModel>;
 
     static setup(sequelizeInstance: Sequelize) {
         TitleModel.init(
