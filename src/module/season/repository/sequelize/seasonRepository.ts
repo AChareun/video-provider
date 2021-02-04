@@ -23,8 +23,6 @@ export class SeasonRepository extends AbstractSeasonRepository {
             const seasons: SeasonModel[] = await this.seasonModel.findAll({
                 limit,
                 offset,
-                // @ts-expect-error
-                include: this.titleModel,
             });
             return seasons.map(fromModelToEntity);
         } catch (error) {
@@ -55,8 +53,6 @@ export class SeasonRepository extends AbstractSeasonRepository {
                 const { in: opIn } = Op;
                 seasons = await this.seasonModel.findAll({
                     where: { id: { [opIn]: id } },
-                    // @ts-expect-error
-                    include: this.titleModel,
                 });
             } catch (error) {
                 console.log('Error log: ', error);
@@ -73,8 +69,7 @@ export class SeasonRepository extends AbstractSeasonRepository {
             let season;
 
             try {
-                // @ts-expect-error
-                season = await this.seasonModel.findByPk(id, { include: this.titleModel });
+                season = await this.seasonModel.findByPk(id);
             } catch (error) {
                 console.log('Error log: ', error);
                 if (error instanceof DatabaseError) {
@@ -94,9 +89,7 @@ export class SeasonRepository extends AbstractSeasonRepository {
     }
 
     async addSeason(data: SeasonCreationAttributes): Promise<Season> {
-        const buildOptions = { include: this.titleModel }
-        // @ts-expect-error
-        const newSeason = this.seasonModel.build(data, buildOptions);
+        const newSeason = this.seasonModel.build(data);
         newSeason.setDataValue('titleId', data.titleId)
         try{
             await newSeason.save();
