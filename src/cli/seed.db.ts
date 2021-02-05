@@ -19,7 +19,7 @@ titleModel.create({
     premiereDate: new Date('Oct. 04, 1995'),
     seasonCount: 1,
     sourceImage: 'https://animeflv1.com/wp-content/uploads/2020/04/lqqlHAmCk5jPjAjWKvZkJzmYdt1-185x278.jpg',
-    synopsis: 'En el año 1999, en la Antártida, ocurrió un cataclismo llamado “El Segundo Impacto”, como resultado de un incidente ocasionado por unos seres conocidos como “Ángeles”. Gran parte de la Tierra quedó devastada por el fenómeno, y la mitad de la población sucumbió en la catástrofe, aunque ahora la humanidad gradualmente se va recuperando. Años después, en el 2015, los “Ángeles” regresan y comienzan a atacar a la Tierra… Cada uno de los “Ángeles” es diferente de los demás, excepto por el hecho de que todos pueden generar un impenetrable escudo protector llamado Campo AT. La organización NERV revela su nuevo proyecto con miras a salvar el mundo: gigantes y bio-mecánicos robots conocidos como Evas, que son unos de las pocas fuerzas sobre la Tierra capaces de enfrentar a los “Ángeles”. Sólo niños específicos pueden pilotar los Evas: Shinji Ikari, el hijo de el jefe de NERV y que no desea pelear, la reservada Rei Ayanami y la exaltada (y algo amante del combate) Asuka Langley. Mientras combaten a los “Ángeles” uno a uno, van descubriendo más y más acerca de la naturaleza y el futuro de la humanidad…',
+    synopsis: 'En el año 1999, en la Antártida, ocurrió un cataclismo llamado “El Segundo Impacto”, como resultado de un incidente ocasionado por unos seres conocidos como “Ángeles”.',
     trailerUrl: 'https://www.youtube.com/watch?v=13nSISwxrY4&ab_channel=Netflix'
 }).catch((error) => {
     console.log(error);
@@ -32,7 +32,7 @@ seasonModel.create({
     premiereDate: new Date('Oct. 04, 1995'),
     seasonNumber: 1,
     sourceImage: 'https://animeflv1.com/wp-content/uploads/2020/04/lqqlHAmCk5jPjAjWKvZkJzmYdt1-185x278.jpg',
-    synopsis: 'En el año 1999, en la Antártida, ocurrió un cataclismo llamado “El Segundo Impacto”, como resultado de un incidente ocasionado por unos seres conocidos como “Ángeles”. Gran parte de la Tierra quedó devastada por el fenómeno, y la mitad de la población sucumbió en la catástrofe, aunque ahora la humanidad gradualmente se va recuperando. Años después, en el 2015, los “Ángeles” regresan y comienzan a atacar a la Tierra… Cada uno de los “Ángeles” es diferente de los demás, excepto por el hecho de que todos pueden generar un impenetrable escudo protector llamado Campo AT. La organización NERV revela su nuevo proyecto con miras a salvar el mundo: gigantes y bio-mecánicos robots conocidos como Evas, que son unos de las pocas fuerzas sobre la Tierra capaces de enfrentar a los “Ángeles”. Sólo niños específicos pueden pilotar los Evas: Shinji Ikari, el hijo de el jefe de NERV y que no desea pelear, la reservada Rei Ayanami y la exaltada (y algo amante del combate) Asuka Langley. Mientras combaten a los “Ángeles” uno a uno, van descubriendo más y más acerca de la naturaleza y el futuro de la humanidad…',
+    synopsis: 'En el año 1999, en la Antártida, ocurrió un cataclismo llamado “El Segundo Impacto”, como resultado de un incidente ocasionado por unos seres conocidos como “Ángeles”.',
     titleId: 1,
     trailerUrl: 'https://www.youtube.com/watch?v=13nSISwxrY4&ab_channel=Netflix'
 }).catch((error) => {
@@ -40,7 +40,7 @@ seasonModel.create({
 });
 
 episodeModel.create({
-    description: 'In 2000, the first disastrous contact with the mysterious beings known as Angels resulted in the global cataclysm referred to as the Second Impact, which wiped out half of the human race. To defend humanity against future Angel attacks, the United Nations established the NERV organization in Tokyo-3 to develop giant bio-mechanical mecha known as Evangelions. Fifteen years later, the Angels have finally returned, and the untested Evangelions can only be piloted by specially selected 14-year-olds. Shinji Ikari, estranged son of the director of NERV, Commander Gendo Ikari, arrives in Tokyo-3 and is dragooned into piloting Evangelion Unit 01 to fight the Angel, Sachiel, which is attacking the city.',
+    description: 'In 2000, the first disastrous contact with the mysterious beings known as Angels resulted in the global cataclysm referred to as the Second Impact, which wiped out half of the human race.',
     episodeNumber: 1,
     id: undefined,
     introEndTime: 90,
