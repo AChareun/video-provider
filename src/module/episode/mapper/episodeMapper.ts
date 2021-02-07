@@ -9,29 +9,29 @@ export const fromModelToEntity = (episodeModel: EpisodeModel): Episode => {
 export const fromEntityToModel = (episode: Episode): EpisodeCreationAttributes => {
     const {
         SeasonId,
-        EpisodeId,
-        EpisodeDescription,
-        EpisodeName,
-        EpisodeNumber,
+        Id,
+        Description,
+        Name,
+        Number,
         IntroEndTime,
         IntroStartTime,
         Length,
         OutroEndTime,
         OutroStartTime,
-        SourcePath,
+        Source,
     } = episode;
 
     return {
-        description: EpisodeDescription,
-        episodeNumber: EpisodeNumber,
-        id: EpisodeId,
+        description: Description,
+        episodeNumber: Number,
+        id: Id,
         introEndTime: IntroEndTime,
         introStartTime: IntroStartTime,
         length: Length,
-        name: EpisodeName,
+        name: Name,
         outroEndTime: OutroEndTime,
         outroStartTime: OutroStartTime,
         seasonId: SeasonId,
-        sourcePath: SourcePath,
+        sourcePath: Source,
     };
 };

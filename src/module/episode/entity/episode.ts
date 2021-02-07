@@ -1,12 +1,12 @@
 import { EpisodeCreationAttributes } from '../model/episodeModel';
 
 export class Episode {
-    EpisodeId: number | undefined;
+    Id: number | undefined;
     SeasonId: number;
-    EpisodeNumber: number;
-    EpisodeName: string | undefined;
-    EpisodeDescription: string | undefined;
-    SourcePath: string | undefined;
+    Number: number;
+    Name: string | undefined;
+    Description: string | undefined;
+    Source: string | undefined;
     Length: number | undefined;
     IntroStartTime: number | undefined;
     IntroEndTime: number | undefined;
@@ -26,12 +26,12 @@ export class Episode {
         outroStartTime,
         outroEndTime,
     }: EpisodeCreationAttributes) {
-        this.EpisodeId = id;
+        this.Id = id;
         this.SeasonId = seasonId;
-        this.EpisodeNumber = episodeNumber;
-        this.EpisodeName = name;
-        this.EpisodeDescription = description;
-        this.SourcePath = sourcePath;
+        this.Number = episodeNumber;
+        this.Name = name;
+        this.Description = description;
+        this.Source = sourcePath;
         this.Length = length;
         this.IntroStartTime = introStartTime;
         this.IntroEndTime = introEndTime;
