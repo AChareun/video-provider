@@ -167,4 +167,6 @@ test('Method getByNumber returns the right episode', async () => {
     const episode1 = await insertEpisode();
 
     await expect(testRepo.getByNumber(1, 1, 1)).resolves.toEqual(episode1);
+
+    await expect(testRepo.getByNumber(2, 2, 1)).rejects.toThrowError(ResourceNotFoundError)
 });

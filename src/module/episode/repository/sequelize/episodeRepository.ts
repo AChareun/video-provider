@@ -123,7 +123,7 @@ export class EpisodeRepository extends AbstractEpisodeRepository {
                                 seasonNumber,
                             },
                         })
-                        .then((r) => r?.id),
+                        .then((r) => r?.id || null),
                 },
             });
         } catch (error) {
