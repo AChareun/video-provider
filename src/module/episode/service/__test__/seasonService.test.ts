@@ -1,10 +1,12 @@
 import { EpisodeService } from '../episodeService';
 import { EpisodeCreationAttributes } from '../../model/episodeModel';
+import { Episode } from '../../entity/episode';
 
 const repositoryMock = {
     getPaginated: jest.fn(),
     getById: jest.fn(),
     addEpisode: jest.fn(),
+    getByNumber: jest.fn(),
 };
 
 const testService = new EpisodeService(repositoryMock);
@@ -29,18 +31,18 @@ test('EpisodeService method getById should call correct EpisodeRepository method
 });
 
 test('EpisodeService method addEpisode should call correct EpisodeRepository method', () => {
-    const mockData: EpisodeCreationAttributes = {
-        description: undefined,
-        episodeNumber: 0,
-        id: 0,
-        introEndTime: undefined,
-        introStartTime: undefined,
-        length: undefined,
-        name: undefined,
-        outroEndTime: undefined,
-        outroStartTime: undefined,
-        seasonId: 0,
-        sourcePath: undefined
+    const mockData: Episode = {
+        Description: 'undefined',
+        Id: undefined,
+        IntroEndTime: 2,
+        IntroStartTime: 1,
+        Length: 5,
+        Name: 'undefined',
+        Number: 0,
+        OutroEndTime: 2,
+        OutroStartTime: 1,
+        SeasonId: 0,
+        Source: 'undefined'
     };
 
     testService.addEpisode(mockData);
@@ -48,3 +50,10 @@ test('EpisodeService method addEpisode should call correct EpisodeRepository met
     expect(repositoryMock.addEpisode).toHaveBeenCalledTimes(1);
     expect(repositoryMock.addEpisode).toHaveBeenCalledWith(mockData);
 });
+
+test('EpisodeService method getByNumber should call correct EpisodeRepository method', () => {
+    testService.getByNumber(1, 1, 1);
+
+    expect(repositoryMock.getByNumber).toHaveBeenCalledTimes(1);
+    expect(repositoryMock.getByNumber).toHaveBeenCalledWith(1, 1, 1);
+})

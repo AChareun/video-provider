@@ -6,7 +6,7 @@ import { EpisodeCreationAttributes, EpisodeModel } from '../../../model/episodeM
 import { Episode } from '../../../entity/episode';
 import { fromModelToEntity } from '../../../mapper/episodeMapper';
 import { SeasonCreationAttributes, SeasonModel } from '../../../../season/model/seasonModel';
-import { TitleModel, TitleCreationAttributes } from '../../../../title/model/titleModel'
+import { TitleModel, TitleCreationAttributes } from '../../../../title/model/titleModel';
 
 /**
  *
@@ -155,10 +155,16 @@ test('Method addEpisode correctly saves a new record with id 1', async () => {
         OutroEndTime: 5,
         OutroStartTime: 4,
         SeasonId: 1,
-        Source: ''
-    }
+        Source: '',
+    };
     const newEpisode = await testRepo.addEpisode(mockEpisode);
 
     await expect(testRepo.getById(1)).resolves.toEqual(newEpisode);
     expect(newEpisode.SeasonId).toEqual(1);
+});
+
+test('Method getByNumber returns the right episode', async () => {
+    const episode1 = await insertEpisode();
+
+    await expect(testRepo.getByNumber(1, 1, 1)).resolves.toEqual(episode1);
 });
