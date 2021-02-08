@@ -20,10 +20,12 @@ const serviceMock = {
         getPaginated: jest.fn(() => Promise.resolve([episodeMock])),
         getById: jest.fn(() => Promise.resolve(episodeMock)),
         addEpisode: jest.fn(() => Promise.resolve(episodeMock)),
+        getByNumber: jest.fn(() => Promise.resolve(episodeMock)),
     },
     getPaginated: jest.fn(() => Promise.resolve([episodeMock])),
     getById: jest.fn(() => Promise.resolve(episodeMock)),
     addEpisode: jest.fn(() => Promise.resolve(episodeMock)),
+    getByNumber: jest.fn(() => Promise.resolve(episodeMock)),
 };
 
 const responseMock = {
@@ -91,6 +93,12 @@ test('getEpisodes method should call corresponding service method depending on q
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(1);
     expect(serviceMock.getById).toHaveBeenCalledWith([1, 2, 3, 4]);
+
+    // @ts-expect-error
+    await testController.getByNumber({ query: { titleId: '1', seasonNm: '1', number: '1' } }, resMock);
+
+    expect(serviceMock.getByNumber).toHaveBeenCalledTimes(1);
+    expect(serviceMock.getByNumber).toHaveBeenCalledWith(1, 1, 1);
 });
 
 
@@ -117,5 +125,11 @@ test('controller methods successfully call res.json method with response from re
     await testController.getEpisodes({ query: { episodeIds: '1, 2, 3, 4' } }, resMock);
 
     expect(responseHelperMock.buildOkResponse).toHaveBeenCalledTimes(4);
+    expect(resMock.json).toHaveBeenCalledWith(responseMock);
+
+    // @ts-expect-error
+    await testController.getByNumber({ query: { titleId: '1', seasonNm: '1', number: '1' } }, resMock);
+
+    expect(responseHelperMock.buildOkResponse).toHaveBeenCalledTimes(5);
     expect(resMock.json).toHaveBeenCalledWith(responseMock);
 });

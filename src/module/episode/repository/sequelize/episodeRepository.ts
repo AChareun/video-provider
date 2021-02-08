@@ -90,9 +90,9 @@ export class EpisodeRepository extends AbstractEpisodeRepository {
 
     async addEpisode(data: Episode): Promise<Episode> {
         const newEpisode = this.episodeModel.build(fromEntityToModel(data));
-        try{
+        try {
             await newEpisode.save();
-        }catch (error) {
+        } catch (error) {
             console.log('Error log: ', error);
             if (error instanceof DatabaseError) {
                 console.log('SQL Error Parameters: ', error.parameters);
@@ -103,5 +103,43 @@ export class EpisodeRepository extends AbstractEpisodeRepository {
         }
 
         return fromModelToEntity(newEpisode);
+    }
+
+    async getByNumber(
+        titleId: number,
+        seasonNumber: number,
+        episodeNumber: number
+    ): Promise<Episode> {
+        let episode: EpisodeModel | null;
+
+        try {
+            episode = await this.episodeModel.findOne({
+                where: {
+                    episodeNumber,
+                    seasonId: await this.seasonModel
+                        .findOne({
+                            where: {
+                                titleId,
+                                seasonNumber,
+                            },
+                        })
+                        .then((r) => r?.id),
+                },
+            });
+        } catch (error) {
+            console.log('Error log: ', error);
+            if (error instanceof DatabaseError) {
+                console.log('SQL Error Parameters: ', error.parameters);
+                console.log('SQL Error Query: ', error.sql);
+                throw new GenericDatabaseError();
+            }
+            throw error;
+        }
+
+        if (!episode) {
+            throw new ResourceNotFoundError();
+        }
+
+        return fromModelToEntity(episode);
     }
 }

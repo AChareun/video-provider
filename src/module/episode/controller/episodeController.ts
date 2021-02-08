@@ -27,6 +27,10 @@ export class EpisodeController extends AbstractController {
             return this.getPaginated(req, res);
         }
 
+        if (req.query.titleId && req.query.seasonNm && req.query.number) {
+            return this.getByNumber(req, res);
+        }
+
         let apiResponse: IApiResponse;
         if (req.query.episodeIds) {
             const queryParam = String(req.query.episodeIds);
@@ -38,12 +42,12 @@ export class EpisodeController extends AbstractController {
             } catch (error) {
                 apiResponse = this.responseHelper.buildErrorResponse(error.name);
                 res.status(400).json(apiResponse);
-                return
+                return;
             }
         } else {
             apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
             res.status(400).json(apiResponse);
-            return
+            return;
         }
 
         res.status(200).json(apiResponse);
@@ -61,12 +65,12 @@ export class EpisodeController extends AbstractController {
             } catch (error) {
                 apiResponse = this.responseHelper.buildErrorResponse(error.name);
                 res.status(400).json(apiResponse);
-                return
+                return;
             }
         } else {
             apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
             res.status(400).json(apiResponse);
-            return
+            return;
         }
 
         res.status(200).json(apiResponse);
@@ -82,12 +86,12 @@ export class EpisodeController extends AbstractController {
             } catch (error) {
                 apiResponse = this.responseHelper.buildErrorResponse(error.name);
                 res.status(400).json(apiResponse);
-                return
+                return;
             }
         } else {
             apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
             res.status(400).json(apiResponse);
-            return
+            return;
         }
 
         res.status(200).json(apiResponse);
@@ -104,6 +108,41 @@ export class EpisodeController extends AbstractController {
             console.log(error);
             apiResponse = this.responseHelper.buildErrorResponse(error.name);
             res.status(400).json(apiResponse);
+        }
+
+        res.status(200).json(apiResponse);
+    }
+
+    async getByNumber(req: Request, res: Response): Promise<void> {
+        const { titleId, seasonNm, number } = req.query;
+
+        let apiResponse: IApiResponse;
+        if (
+            typeof titleId === 'string' &&
+            typeof seasonNm === 'string' &&
+            typeof number === 'string'
+        ) {
+            try {
+                const [titleIdInt, seasonNmInt, numberInt] = [
+                    parseInt(titleId),
+                    parseInt(seasonNm),
+                    parseInt(number),
+                ];
+                const episode = await this.episodeService.getByNumber(
+                    titleIdInt,
+                    seasonNmInt,
+                    numberInt
+                );
+                apiResponse = this.responseHelper.buildOkResponse([episode]);
+            } catch (error) {
+                apiResponse = this.responseHelper.buildErrorResponse(error.name);
+                res.status(400).json(apiResponse);
+                return;
+            }
+        } else {
+            apiResponse = this.responseHelper.buildErrorResponse('WRONG_QUERY_PARAM');
+            res.status(400).json(apiResponse);
+            return;
         }
 
         res.status(200).json(apiResponse);
