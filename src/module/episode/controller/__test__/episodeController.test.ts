@@ -1,57 +1,9 @@
 import { EpisodeController } from '../episodeController';
-import { Episode } from '../../entity/episode';
 
-const episodeMock = new Episode({
-    description: undefined,
-    episodeNumber: 0,
-    id: 0,
-    introEndTime: undefined,
-    introStartTime: undefined,
-    length: undefined,
-    name: undefined,
-    outroEndTime: undefined,
-    outroStartTime: undefined,
-    seasonId: 0,
-    sourcePath: undefined
-});
-
-const serviceMock = {
-    episodeRepository: {
-        getPaginated: jest.fn(() => Promise.resolve([episodeMock])),
-        getById: jest.fn(() => Promise.resolve(episodeMock)),
-        addEpisode: jest.fn(() => Promise.resolve(episodeMock)),
-        getByNumber: jest.fn(() => Promise.resolve(episodeMock)),
-    },
-    getPaginated: jest.fn(() => Promise.resolve([episodeMock])),
-    getById: jest.fn(() => Promise.resolve(episodeMock)),
-    addEpisode: jest.fn(() => Promise.resolve(episodeMock)),
-    getByNumber: jest.fn(() => Promise.resolve(episodeMock)),
-};
-
-const responseMock = {
-    status: 'status',
-    code: 322,
-    message: 'message',
-    data: null,
-};
-
-const responseHelperMock = {
-    apiErrors: [],
-    buildOkResponse: jest.fn(() => responseMock),
-    buildErrorResponse: jest.fn(() => responseMock),
-};
-
-const resMock = (() => {
-    const res = {
-        status: function(){}, json: function(){},
-    };
-    res.status = jest.fn().mockReturnValue(res);
-    res.json = jest.fn().mockReturnValue(res);
-    return res;
-})();
+import { episodeMock, episodeServiceMock, resMock, responseHelperMock, responseMock } from '../../../__test__/testMocks';
 
 // @ts-expect-error
-const testController = new EpisodeController(serviceMock, responseHelperMock);
+const testController = new EpisodeController(episodeServiceMock, responseHelperMock);
 
 beforeEach((): void => {
     jest.clearAllMocks();
@@ -61,44 +13,44 @@ test('getPaginated method should call corresponding service method', async () =>
     // @ts-expect-error
     await testController.getPaginated({ query: { limit: '1', offset: '0' } }, resMock);
 
-    expect(serviceMock.getPaginated).toHaveBeenCalledTimes(1);
-    expect(serviceMock.getPaginated).toHaveBeenCalledWith(1, 0);
+    expect(episodeServiceMock.getPaginated).toHaveBeenCalledTimes(1);
+    expect(episodeServiceMock.getPaginated).toHaveBeenCalledWith(1, 0);
 });
 
 test('getById method should call corresponding service method and call send with resolve', async () => {
     // @ts-expect-error
     await testController.getById({ params: { episodeId: '1' } }, resMock);
 
-    expect(serviceMock.getById).toHaveBeenCalledTimes(1);
-    expect(serviceMock.getById).toHaveBeenCalledWith(1);
+    expect(episodeServiceMock.getById).toHaveBeenCalledTimes(1);
+    expect(episodeServiceMock.getById).toHaveBeenCalledWith(1);
 });
 
 test('postEpisode method should call corresponding service method and call send with resolve', async () => {
     // @ts-expect-error
     await testController.postEpisode({ body: episodeMock }, resMock);
 
-    expect(serviceMock.addEpisode).toHaveBeenCalledTimes(1);
-    expect(serviceMock.addEpisode).toHaveBeenCalledWith(episodeMock);
+    expect(episodeServiceMock.addEpisode).toHaveBeenCalledTimes(1);
+    expect(episodeServiceMock.addEpisode).toHaveBeenCalledWith(episodeMock);
 });
 
 test('getEpisodes method should call corresponding service method depending on query props', async () => {
     // @ts-expect-error
     await testController.getEpisodes({ query: { limit: '1', offset: '0' } }, resMock);
 
-    expect(serviceMock.getPaginated).toHaveBeenCalledTimes(1);
-    expect(serviceMock.getPaginated).toHaveBeenCalledWith(1, 0);
+    expect(episodeServiceMock.getPaginated).toHaveBeenCalledTimes(1);
+    expect(episodeServiceMock.getPaginated).toHaveBeenCalledWith(1, 0);
 
     // @ts-expect-error
     await testController.getEpisodes({ query: { episodeIds: '1, 2, 3, 4' } }, resMock);
 
-    expect(serviceMock.getById).toHaveBeenCalledTimes(1);
-    expect(serviceMock.getById).toHaveBeenCalledWith([1, 2, 3, 4]);
+    expect(episodeServiceMock.getById).toHaveBeenCalledTimes(1);
+    expect(episodeServiceMock.getById).toHaveBeenCalledWith([1, 2, 3, 4]);
 
     // @ts-expect-error
     await testController.getByNumber({ query: { titleId: '1', seasonNm: '1', number: '1' } }, resMock);
 
-    expect(serviceMock.getByNumber).toHaveBeenCalledTimes(1);
-    expect(serviceMock.getByNumber).toHaveBeenCalledWith(1, 1, 1);
+    expect(episodeServiceMock.getByNumber).toHaveBeenCalledTimes(1);
+    expect(episodeServiceMock.getByNumber).toHaveBeenCalledWith(1, 1, 1);
 });
 
 

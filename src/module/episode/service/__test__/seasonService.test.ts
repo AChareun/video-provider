@@ -1,33 +1,27 @@
 import { EpisodeService } from '../episodeService';
-import { EpisodeCreationAttributes } from '../../model/episodeModel';
 import { Episode } from '../../entity/episode';
 
-const repositoryMock = {
-    getPaginated: jest.fn(),
-    getById: jest.fn(),
-    addEpisode: jest.fn(),
-    getByNumber: jest.fn(),
-};
+import { episodeRepositoryMock } from '../../../__test__/testMocks';
 
-const testService = new EpisodeService(repositoryMock);
+const testService = new EpisodeService(episodeRepositoryMock);
 
 test('EpisodeService method getPaginated should call correct EpisodeRepository method ', () => {
     testService.getPaginated(1, 0);
 
-    expect(repositoryMock.getPaginated).toHaveBeenCalledTimes(1);
-    expect(repositoryMock.getPaginated).toHaveBeenCalledWith(1, 0);
+    expect(episodeRepositoryMock.getPaginated).toHaveBeenCalledTimes(1);
+    expect(episodeRepositoryMock.getPaginated).toHaveBeenCalledWith(1, 0);
 });
 
 test('EpisodeService method getById should call correct EpisodeRepository method ', () => {
     testService.getById(1);
 
-    expect(repositoryMock.getById).toHaveBeenCalledTimes(1);
-    expect(repositoryMock.getById).toHaveBeenCalledWith(1);
+    expect(episodeRepositoryMock.getById).toHaveBeenCalledTimes(1);
+    expect(episodeRepositoryMock.getById).toHaveBeenCalledWith(1);
 
     testService.getById([1, 2, 3, 4]);
 
-    expect(repositoryMock.getById).toHaveBeenCalledTimes(2);
-    expect(repositoryMock.getById).toHaveBeenCalledWith([1, 2, 3, 4]);
+    expect(episodeRepositoryMock.getById).toHaveBeenCalledTimes(2);
+    expect(episodeRepositoryMock.getById).toHaveBeenCalledWith([1, 2, 3, 4]);
 });
 
 test('EpisodeService method addEpisode should call correct EpisodeRepository method', () => {
@@ -47,13 +41,13 @@ test('EpisodeService method addEpisode should call correct EpisodeRepository met
 
     testService.addEpisode(mockData);
 
-    expect(repositoryMock.addEpisode).toHaveBeenCalledTimes(1);
-    expect(repositoryMock.addEpisode).toHaveBeenCalledWith(mockData);
+    expect(episodeRepositoryMock.addEpisode).toHaveBeenCalledTimes(1);
+    expect(episodeRepositoryMock.addEpisode).toHaveBeenCalledWith(mockData);
 });
 
 test('EpisodeService method getByNumber should call correct EpisodeRepository method', () => {
     testService.getByNumber(1, 1, 1);
 
-    expect(repositoryMock.getByNumber).toHaveBeenCalledTimes(1);
-    expect(repositoryMock.getByNumber).toHaveBeenCalledWith(1, 1, 1);
+    expect(episodeRepositoryMock.getByNumber).toHaveBeenCalledTimes(1);
+    expect(episodeRepositoryMock.getByNumber).toHaveBeenCalledWith(1, 1, 1);
 })
