@@ -2,14 +2,24 @@ import { Sequelize } from 'sequelize';
 
 import { SeasonRepository } from '../seasonRepository';
 import { ResourceNotFoundError } from '../../../../error/resourceNotFoundError';
-import { SeasonCreationAttributes, SeasonModel } from '../../../model/seasonModel';
+
 import { Season } from '../../../entity/season';
-import { fromModelToEntity } from '../../../mapper/seasonMapper';
-import { TitleModel } from '../../../../title/module';
-import { TitleCreationAttributes } from '../../../../title/model/titleModel';
-import { EpisodeCreationAttributes, EpisodeModel } from '../../../../episode/model/episodeModel';
+import { SeasonCreationAttributes, SeasonModel } from '../../../model/seasonModel';
+import { fromModelToEntity as fromSeasonModelToEntity } from '../../../mapper/seasonMapper';
+
+import { Title } from '../../../../title/entity/title';
+import { fromModelToEntity as fromTitleModelToEntity } from '../../../../title/mapper/titleMapper';
+import { TitleModel, TitleCreationAttributes } from '../../../../title/model/titleModel';
+
 import { Episode } from '../../../../episode/entity/episode';
-import { fromModelToEntity as fromModelToEntityEpisode } from '../../../../episode/mapper/episodeMapper';
+import {
+    fromModelToEntity,
+    fromModelToEntity as fromModelToEntityEpisode
+} from '../../../../episode/mapper/episodeMapper';
+import { EpisodeCreationAttributes, EpisodeModel } from '../../../../episode/model/episodeModel';
+
+import { fakeNewEpisode, fakeNewSeason, fakeNewTitle } from '../../../../__test__/testMocks';
+import { insertModel } from '../../../../__test__/testHelpers';
 
 /**
  *
@@ -25,57 +35,6 @@ let episodeModel: typeof EpisodeModel;
 let seasonModel: typeof SeasonModel;
 let titleModel: typeof TitleModel;
 
-const fakeNewSeason: SeasonCreationAttributes = {
-    episodeCount: 10,
-    id: undefined,
-    name: 'Season Name',
-    premiereDate: new Date(),
-    seasonNumber: 1,
-    sourceImage: 'Source Image',
-    synopsis: 'Synopsis',
-    titleId: 1,
-    trailerUrl: 'Trailer URL',
-};
-
-const insertSeason = async (): Promise<Season> => {
-    const newSeason = await seasonModel.create(fakeNewSeason);
-    return fromModelToEntity(newSeason);
-};
-
-const fakeNewTitle: TitleCreationAttributes = {
-    id: undefined,
-    name: 'Title',
-    synopsis: 'Synopsis',
-    episodeCount: 10,
-    seasonCount: 1,
-    sourceImage: 'coverUrl',
-    premiereDate: new Date(),
-    trailerUrl: 'trailerUrl',
-};
-
-const insertTitle = async (): Promise<void> => {
-    await titleModel.create(fakeNewTitle);
-};
-
-const fakeNewEpisode: EpisodeCreationAttributes = {
-    description: 'Description',
-    episodeNumber: 1,
-    id: undefined,
-    introEndTime: 120,
-    introStartTime: 60,
-    length: 620,
-    name: 'Name',
-    outroEndTime: 610,
-    outroStartTime: 580,
-    seasonId: 1,
-    sourcePath: 'videoUrl',
-};
-
-const insertEpisode = async (): Promise<Episode> => {
-    const newEpisode = await episodeModel.create(fakeNewEpisode);
-    return fromModelToEntityEpisode(newEpisode);
-};
-
 beforeAll((): void => {
     titleModel = TitleModel.setup(testSequelizeInstance);
     seasonModel = SeasonModel.setup(testSequelizeInstance);
@@ -88,7 +47,8 @@ beforeAll((): void => {
 beforeEach(
     async (done): Promise<void> => {
         await testSequelizeInstance.sync({ force: true });
-        await insertTitle();
+        // @ts-expect-error
+        await insertModel<TitleCreationAttributes, Title>(fakeNewTitle, titleModel, fromTitleModelToEntity);
         done();
     }
 );
@@ -108,10 +68,14 @@ test('Trying to get a non-existing Season throws a specific error', async () => 
 });
 
 test('Calling method getById with a number returns a single Season with the right id', async () => {
-    const season1 = await insertSeason();
-    const season2 = await insertSeason();
-    const season3 = await insertSeason();
-    const season4 = await insertSeason();
+    // @ts-expect-error
+    const season1 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
+    // @ts-expect-error
+    const season2 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
+    // @ts-expect-error
+    const season3 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
+    // @ts-expect-error
+    const season4 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
 
     await expect(testRepo.getById(1)).resolves.toEqual(season1);
     await expect(testRepo.getById(2)).resolves.toEqual(season2);
@@ -120,10 +84,14 @@ test('Calling method getById with a number returns a single Season with the righ
 });
 
 test('Calling method getById with an array of number returns the requested seasons', async () => {
-    const season1 = await insertSeason();
-    const season2 = await insertSeason();
-    const season3 = await insertSeason();
-    const season4 = await insertSeason();
+    // @ts-expect-error
+    const season1 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
+    // @ts-expect-error
+    const season2 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
+    // @ts-expect-error
+    const season3 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
+    // @ts-expect-error
+    const season4 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
 
     await expect(testRepo.getById([1, 4])).resolves.toEqual([season1, season4]);
 });
@@ -131,10 +99,14 @@ test('Calling method getById with an array of number returns the requested seaso
 test('Method getPaginated returns correct amount of seasons', async () => {
     await expect(testRepo.getPaginated(1, 1)).resolves.toEqual([]);
 
-    const season1 = await insertSeason();
-    const season2 = await insertSeason();
-    const season3 = await insertSeason();
-    const season4 = await insertSeason();
+    // @ts-expect-error
+    const season1 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
+    // @ts-expect-error
+    const season2 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
+    // @ts-expect-error
+    const season3 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
+    // @ts-expect-error
+    const season4 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
 
     await expect(testRepo.getPaginated(4, 0)).resolves.toEqual([
         season1,
@@ -164,11 +136,15 @@ test('Method addSeason correctly saves a new record with id 1', async () => {
 });
 
 test('Method getSeasonEpisodes returns the episodes associated with the seasonId', async () => {
-    const season1 = await insertSeason();
-    const season2 = await insertSeason();
+    // @ts-expect-error
+    const season1 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
+    // @ts-expect-error
+    const season2 = await insertModel<SeasonCreationAttributes, Season>(fakeNewSeason, seasonModel, fromSeasonModelToEntity);
 
-    const episode1 = await insertEpisode();
-    const episode2 = await insertEpisode();
+    // @ts-expect-error
+    const episode1 = await insertModel<EpisodeCreationAttributes, Episode>(fakeNewEpisode, episodeModel, fromModelToEntity);
+    // @ts-expect-error
+    const episode2 = await insertModel<EpisodeCreationAttributes, Episode>(fakeNewEpisode, episodeModel, fromModelToEntity);
 
     await expect(testRepo.getSeasonEpisodes(1)).resolves.toEqual([episode1, episode2]);
     await expect(testRepo.getSeasonEpisodes(2)).resolves.toEqual([]);

@@ -1,70 +1,15 @@
 import { SeasonController } from '../seasonController';
-import { Season } from '../../entity/season';
-import { Episode } from '../../../episode/entity/episode';
 
-const seasonMock = new Season({
-    episodeCount: 10,
-    id: 1,
-    name: 'Name',
-    number: 1,
-    premiereDate: new Date(),
-    sourceImage: "ImgURL",
-    synopsis: "Synopsis",
-    titleId: 0,
-    trailerUrl: "TrailerUrl"
-});
-
-const episodeMock = new Episode({
-    description: undefined,
-    episodeNumber: 0,
-    id: 0,
-    introEndTime: undefined,
-    introStartTime: undefined,
-    length: undefined,
-    name: undefined,
-    outroEndTime: undefined,
-    outroStartTime: undefined,
-    seasonId: 0,
-    sourcePath: undefined
-});
-
-const serviceMock = {
-    seasonRepository: {
-        getPaginated: jest.fn(() => Promise.resolve([seasonMock])),
-        getById: jest.fn(() => Promise.resolve(seasonMock)),
-        addSeason: jest.fn(() => Promise.resolve(seasonMock)),
-        getSeasonEpisodes: jest.fn(() => Promise.resolve([episodeMock]))
-    },
-    getPaginated: jest.fn(() => Promise.resolve([seasonMock])),
-    getById: jest.fn(() => Promise.resolve(seasonMock)),
-    addSeason: jest.fn(() => Promise.resolve(seasonMock)),
-    getSeasonEpisodes: jest.fn(() => Promise.resolve([episodeMock])),
-};
-
-const responseMock = {
-    status: 'status',
-    code: 322,
-    message: 'message',
-    data: null,
-};
-
-const responseHelperMock = {
-    apiErrors: [],
-    buildOkResponse: jest.fn(() => responseMock),
-    buildErrorResponse: jest.fn(() => responseMock),
-};
-
-const resMock = (() => {
-    const res = {
-        status: function(){}, json: function(){},
-    };
-    res.status = jest.fn().mockReturnValue(res);
-    res.json = jest.fn().mockReturnValue(res);
-    return res;
-})();
+import {
+    seasonMock,
+    resMock,
+    seasonServiceMock,
+    responseHelperMock,
+    responseMock
+} from '../../../__test__/testMocks';
 
 // @ts-expect-error
-const testController = new SeasonController(serviceMock, responseHelperMock);
+const testController = new SeasonController(seasonServiceMock, responseHelperMock);
 
 beforeEach((): void => {
     jest.clearAllMocks();
@@ -74,46 +19,46 @@ test('getPaginated method should call corresponding service method', async () =>
     // @ts-expect-error
     await testController.getPaginated({ query: { limit: '1', offset: '0' } }, resMock);
 
-    expect(serviceMock.getPaginated).toHaveBeenCalledTimes(1);
-    expect(serviceMock.getPaginated).toHaveBeenCalledWith(1, 0);
+    expect(seasonServiceMock.getPaginated).toHaveBeenCalledTimes(1);
+    expect(seasonServiceMock.getPaginated).toHaveBeenCalledWith(1, 0);
 });
 
 test('getById method should call corresponding service method and call send with resolve', async () => {
     // @ts-expect-error
     await testController.getById({ params: { seasonId: '1' } }, resMock);
 
-    expect(serviceMock.getById).toHaveBeenCalledTimes(1);
-    expect(serviceMock.getById).toHaveBeenCalledWith(1);
+    expect(seasonServiceMock.getById).toHaveBeenCalledTimes(1);
+    expect(seasonServiceMock.getById).toHaveBeenCalledWith(1);
 });
 
 test('postSeason method should call corresponding service method and call send with resolve', async () => {
     // @ts-expect-error
     await testController.postSeason({ body: seasonMock }, resMock);
 
-    expect(serviceMock.addSeason).toHaveBeenCalledTimes(1);
-    expect(serviceMock.addSeason).toHaveBeenCalledWith(seasonMock);
+    expect(seasonServiceMock.addSeason).toHaveBeenCalledTimes(1);
+    expect(seasonServiceMock.addSeason).toHaveBeenCalledWith(seasonMock);
 });
 
 test('getSeasons method should call corresponding service method depending on query props', async () => {
     // @ts-expect-error
     await testController.getSeasons({ query: { limit: '1', offset: '0' } }, resMock);
 
-    expect(serviceMock.getPaginated).toHaveBeenCalledTimes(1);
-    expect(serviceMock.getPaginated).toHaveBeenCalledWith(1, 0);
+    expect(seasonServiceMock.getPaginated).toHaveBeenCalledTimes(1);
+    expect(seasonServiceMock.getPaginated).toHaveBeenCalledWith(1, 0);
 
     // @ts-expect-error
     await testController.getSeasons({ query: { seasonIds: '1, 2, 3, 4' } }, resMock);
 
-    expect(serviceMock.getById).toHaveBeenCalledTimes(1);
-    expect(serviceMock.getById).toHaveBeenCalledWith([1, 2, 3, 4]);
+    expect(seasonServiceMock.getById).toHaveBeenCalledTimes(1);
+    expect(seasonServiceMock.getById).toHaveBeenCalledWith([1, 2, 3, 4]);
 });
 
 test('getSeasonEpisodes method should call corresponding service method and call send with resolve', async () => {
     // @ts-expect-error
     await testController.getSeasonEpisodes({ params: { seasonId: '1' } }, resMock);
 
-    expect(serviceMock.getSeasonEpisodes).toHaveBeenCalledTimes(1);
-    expect(serviceMock.getSeasonEpisodes).toHaveBeenCalledWith(1);
+    expect(seasonServiceMock.getSeasonEpisodes).toHaveBeenCalledTimes(1);
+    expect(seasonServiceMock.getSeasonEpisodes).toHaveBeenCalledWith(1);
 });
 
 
