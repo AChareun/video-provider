@@ -4,7 +4,7 @@ export interface IApiResponse {
     status: string;
     code: number;
     message: string;
-    data: any[] | null;
+    data: any | any[] | null;
 }
 
 export class ApiResponseHelper {
@@ -14,7 +14,7 @@ export class ApiResponseHelper {
         this.apiErrors = apiErrors;
     }
 
-    buildOkResponse(data?: any[]): IApiResponse {
+    buildOkResponse(data?: any | any[]): IApiResponse {
         return {
             status: 'OK',
             code: 200,

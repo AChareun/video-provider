@@ -82,7 +82,7 @@ export class EpisodeController extends AbstractController {
         if (id || id === '0') {
             try {
                 const episode = await this.episodeService.getById(parseInt(id));
-                apiResponse = this.responseHelper.buildOkResponse([episode]);
+                apiResponse = this.responseHelper.buildOkResponse(episode);
             } catch (error) {
                 apiResponse = this.responseHelper.buildErrorResponse(error.name);
                 res.status(400).json(apiResponse);
