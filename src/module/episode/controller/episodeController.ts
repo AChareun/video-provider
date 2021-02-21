@@ -133,7 +133,7 @@ export class EpisodeController extends AbstractController {
                     seasonNmInt,
                     numberInt
                 );
-                apiResponse = this.responseHelper.buildOkResponse([episode]);
+                apiResponse = this.responseHelper.buildOkResponse(episode);
             } catch (error) {
                 apiResponse = this.responseHelper.buildErrorResponse(error.name);
                 res.status(400).json(apiResponse);
