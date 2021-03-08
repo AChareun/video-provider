@@ -42,6 +42,7 @@ export const episodeRepositoryMock = {
     getById: jest.fn(),
     addRegistry: jest.fn(),
     getByNumber: jest.fn(),
+    getByName: jest.fn(),
 };
 
 export const episodeServiceMock = {
@@ -85,6 +86,7 @@ export const seasonRepositoryMock = {
     getById: jest.fn(),
     addRegistry: jest.fn(),
     getSeasonEpisodes: jest.fn(),
+    getByName: jest.fn(),
 }
 
 export const seasonServiceMock = {
@@ -127,6 +129,7 @@ export const titleRepositoryMock = {
     getById: jest.fn(),
     addRegistry: jest.fn(),
     getTitleSeasons: jest.fn(),
+    getByName: jest.fn(),
 }
 
 export const titleServiceMock = {

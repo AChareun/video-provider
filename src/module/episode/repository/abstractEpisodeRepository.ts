@@ -6,6 +6,9 @@ export abstract class AbstractEpisodeRepository extends AbstractRepository<Episo
 
     // abstract searchBy(): Promise<Episode[]> TODO
 
+    abstract getById(id: number[]): Promise<Episode[]>;
+    abstract getById(id: number): Promise<Episode>;
+
     abstract getByNumber(
         titleId: number,
         seasonNumber: number,

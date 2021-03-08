@@ -142,4 +142,26 @@ export class EpisodeRepository extends AbstractEpisodeRepository {
 
         return fromModelToEntity(episode);
     }
+
+    async getByName(name: string): Promise<Episode> {
+        let episode: EpisodeModel | null;
+
+        try {
+            episode = await this.episodeModel.findOne({where: {name: name}});
+        } catch (error) {
+            console.log('Error log: ', error);
+            if (error instanceof DatabaseError) {
+                console.log('SQL Error Parameters: ', error.parameters);
+                console.log('SQL Error Query: ', error.sql);
+                throw new GenericDatabaseError();
+            }
+            throw error;
+        }
+
+        if (!episode) {
+            throw new ResourceNotFoundError();
+        }
+
+        return fromModelToEntity(episode);
+    }
 }

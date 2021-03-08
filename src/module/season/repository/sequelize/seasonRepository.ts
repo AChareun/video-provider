@@ -1,13 +1,10 @@
-import { DatabaseError, Op } from 'sequelize';
+import { DatabaseError, Op, where } from 'sequelize';
 
 import { AbstractSeasonRepository } from '../abstractSeasonRepository';
 import { ResourceNotFoundError } from '../../../error/resourceNotFoundError';
 import { GenericDatabaseError } from '../../../error/genericDatabaseError';
-import {
-    fromEntityToModel,
-    fromModelToEntity
-} from '../../mapper/seasonMapper';
-import { SeasonCreationAttributes, SeasonModel } from '../../model/seasonModel';
+import { fromEntityToModel, fromModelToEntity } from '../../mapper/seasonMapper';
+import { SeasonModel } from '../../model/seasonModel';
 import { Season } from '../../entity/season';
 import { TitleModel } from '../../../title/module';
 import { Episode } from '../../../episode/entity/episode';
@@ -132,5 +129,27 @@ export class SeasonRepository extends AbstractSeasonRepository {
         }
 
         return seasonEpisodes.map(fromModelToEntityEpisode);
+    }
+
+    async getByName(name: string): Promise<Season> {
+        let season;
+
+        try {
+            season = await this.seasonModel.findOne({where: {name: name}});
+        } catch (error) {
+            console.log('Error log: ', error);
+            if (error instanceof DatabaseError) {
+                console.log('SQL Error Parameters: ', error.parameters);
+                console.log('SQL Error Query: ', error.sql);
+                throw new GenericDatabaseError();
+            }
+            throw error;
+        }
+
+        if (!season) {
+            throw new ResourceNotFoundError();
+        }
+
+        return fromModelToEntity(season);
     }
 }
