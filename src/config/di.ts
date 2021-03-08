@@ -2,6 +2,7 @@ import { default as DIContainer, factory, object, get } from 'rsdi';
 import { Sequelize } from 'sequelize';
 
 import { ApiResponseHelper } from '../lib/apiResponse';
+import { JikanApiAdapter } from '../module/animeApi/jikan/jikanApiAdapter';
 import { TitleController, TitleService, TitleRepository, TitleModel } from '../module/title/module';
 import {
     SeasonController,
@@ -39,7 +40,10 @@ function addTitleModuleDefinitions(container: DIContainer): void {
     container.addDefinitions({
         TitleModel: factory(configureTitleModel),
         TitleRepository: object(TitleRepository).construct(get('TitleModel')),
-        TitleService: object(TitleService).construct(get('TitleRepository')),
+        TitleService: object(TitleService).construct(
+            get('TitleRepository'),
+            object(JikanApiAdapter).construct()
+        ),
         TitleController: object(TitleController).construct(
             get('TitleService'),
             get('ResponseHelper')
