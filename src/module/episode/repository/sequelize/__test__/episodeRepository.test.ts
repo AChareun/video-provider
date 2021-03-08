@@ -129,7 +129,7 @@ test('Method addEpisode correctly saves a new record with id 1', async () => {
         SeasonId: 1,
         Source: '',
     };
-    const newEpisode = await testRepo.addEpisode(mockEpisode);
+    const newEpisode = await testRepo.addRegistry(mockEpisode);
 
     await expect(testRepo.getById(1)).resolves.toEqual(newEpisode);
     expect(newEpisode.SeasonId).toEqual(1);

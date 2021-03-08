@@ -4,7 +4,7 @@ import { AbstractEpisodeRepository } from '../abstractEpisodeRepository';
 import { ResourceNotFoundError } from '../../../error/resourceNotFoundError';
 import { GenericDatabaseError } from '../../../error/genericDatabaseError';
 import { fromEntityToModel, fromModelToEntity } from '../../mapper/episodeMapper';
-import { EpisodeCreationAttributes, EpisodeModel } from '../../model/episodeModel';
+import { EpisodeModel } from '../../model/episodeModel';
 import { Episode } from '../../entity/episode';
 import { SeasonModel } from '../../../season/module';
 
@@ -88,7 +88,7 @@ export class EpisodeRepository extends AbstractEpisodeRepository {
         }
     }
 
-    async addEpisode(data: Episode): Promise<Episode> {
+    async addRegistry(data: Episode): Promise<Episode> {
         const newEpisode = this.episodeModel.build(fromEntityToModel(data));
         try {
             await newEpisode.save();
@@ -126,6 +126,28 @@ export class EpisodeRepository extends AbstractEpisodeRepository {
                         .then((r) => r?.id || null),
                 },
             });
+        } catch (error) {
+            console.log('Error log: ', error);
+            if (error instanceof DatabaseError) {
+                console.log('SQL Error Parameters: ', error.parameters);
+                console.log('SQL Error Query: ', error.sql);
+                throw new GenericDatabaseError();
+            }
+            throw error;
+        }
+
+        if (!episode) {
+            throw new ResourceNotFoundError();
+        }
+
+        return fromModelToEntity(episode);
+    }
+
+    async getByName(name: string): Promise<Episode> {
+        let episode: EpisodeModel | null;
+
+        try {
+            episode = await this.episodeModel.findOne({where: {name: name}});
         } catch (error) {
             console.log('Error log: ', error);
             if (error instanceof DatabaseError) {

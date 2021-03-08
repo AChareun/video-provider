@@ -40,8 +40,9 @@ export const fakeNewEpisode: EpisodeCreationAttributes = {
 export const episodeRepositoryMock = {
     getPaginated: jest.fn(),
     getById: jest.fn(),
-    addEpisode: jest.fn(),
+    addRegistry: jest.fn(),
     getByNumber: jest.fn(),
+    getByName: jest.fn(),
 };
 
 export const episodeServiceMock = {
@@ -83,8 +84,9 @@ export const fakeNewSeason: SeasonCreationAttributes = {
 export const seasonRepositoryMock = {
     getPaginated: jest.fn(),
     getById: jest.fn(),
-    addSeason: jest.fn(),
+    addRegistry: jest.fn(),
     getSeasonEpisodes: jest.fn(),
+    getByName: jest.fn(),
 }
 
 export const seasonServiceMock = {
@@ -125,8 +127,9 @@ export const fakeNewTitle: TitleCreationAttributes = {
 export const titleRepositoryMock = {
     getPaginated: jest.fn(),
     getById: jest.fn(),
-    addTitle: jest.fn(),
+    addRegistry: jest.fn(),
     getTitleSeasons: jest.fn(),
+    getByName: jest.fn(),
 }
 
 export const titleServiceMock = {

@@ -41,8 +41,8 @@ test('EpisodeService method addEpisode should call correct EpisodeRepository met
 
     testService.addEpisode(mockData);
 
-    expect(episodeRepositoryMock.addEpisode).toHaveBeenCalledTimes(1);
-    expect(episodeRepositoryMock.addEpisode).toHaveBeenCalledWith(mockData);
+    expect(episodeRepositoryMock.addRegistry).toHaveBeenCalledTimes(1);
+    expect(episodeRepositoryMock.addRegistry).toHaveBeenCalledWith(mockData);
 });
 
 test('EpisodeService method getByNumber should call correct EpisodeRepository method', () => {

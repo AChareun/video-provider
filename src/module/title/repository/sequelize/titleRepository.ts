@@ -3,7 +3,7 @@ import { DatabaseError, Op } from 'sequelize';
 import { AbstractTitleRepository } from '../abstractTitleRepository';
 import { ResourceNotFoundError } from '../../../error/resourceNotFoundError';
 import { fromEntityToModel, fromModelToEntity } from '../../mapper/titleMapper';
-import { TitleCreationAttributes, TitleModel } from '../../model/titleModel';
+import { TitleModel } from '../../model/titleModel';
 import { Title } from '../../entity/title';
 import { GenericDatabaseError } from '../../../error/genericDatabaseError';
 import { Season } from '../../../season/entity/season';
@@ -83,7 +83,7 @@ export class TitleRepository extends AbstractTitleRepository {
         }
     }
 
-    async addTitle(data: Title): Promise<Title> {
+    async addRegistry(data: Title): Promise<Title> {
         const newTitle = this.titleModel.build(fromEntityToModel(data));
         try {
             await newTitle.save();
@@ -121,5 +121,27 @@ export class TitleRepository extends AbstractTitleRepository {
         }
 
         return titleSeasons.map(fromModelToEntitySeason);
+    }
+
+    async getByName(name: string): Promise<Title> {
+        let title;
+
+        try {
+            title = await this.titleModel.findOne({where: {name: name}});
+        } catch (error) {
+            console.log('Error log: ', error);
+            if (error instanceof DatabaseError) {
+                console.log('SQL Error Parameters: ', error.parameters);
+                console.log('SQL Error Query: ', error.sql);
+                throw new GenericDatabaseError();
+            }
+            throw error;
+        }
+
+        if (!title) {
+            throw new ResourceNotFoundError();
+        }
+
+        return fromModelToEntity(title);
     }
 }

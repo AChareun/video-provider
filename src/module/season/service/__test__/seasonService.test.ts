@@ -1,5 +1,4 @@
 import { SeasonService } from '../seasonService';
-import { SeasonCreationAttributes } from '../../model/seasonModel';
 import { seasonRepositoryMock } from '../../../__test__/testMocks';
 import { Season } from '../../entity/season';
 
@@ -39,8 +38,8 @@ test('SeasonService method addSeason should call correct SeasonRepository method
 
     testService.addSeason(mockData);
 
-    expect(seasonRepositoryMock.addSeason).toHaveBeenCalledTimes(1);
-    expect(seasonRepositoryMock.addSeason).toHaveBeenCalledWith(mockData);
+    expect(seasonRepositoryMock.addRegistry).toHaveBeenCalledTimes(1);
+    expect(seasonRepositoryMock.addRegistry).toHaveBeenCalledWith(mockData);
 });
 
 test('SeasonService method getSeasonEpisodes should call correct SeasonRepository method', () => {
