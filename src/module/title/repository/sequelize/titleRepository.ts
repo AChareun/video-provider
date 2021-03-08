@@ -122,4 +122,26 @@ export class TitleRepository extends AbstractTitleRepository {
 
         return titleSeasons.map(fromModelToEntitySeason);
     }
+
+    async getByName(name: string): Promise<Title> {
+        let title;
+
+        try {
+            title = await this.titleModel.findOne({where: {name: name}});
+        } catch (error) {
+            console.log('Error log: ', error);
+            if (error instanceof DatabaseError) {
+                console.log('SQL Error Parameters: ', error.parameters);
+                console.log('SQL Error Query: ', error.sql);
+                throw new GenericDatabaseError();
+            }
+            throw error;
+        }
+
+        if (!title) {
+            throw new ResourceNotFoundError();
+        }
+
+        return fromModelToEntity(title);
+    }
 }

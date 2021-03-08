@@ -7,5 +7,8 @@ export abstract class AbstractTitleRepository extends AbstractRepository<Title> 
 
     // abstract searchBy(): Promise<Array<Title>> TODO
 
+    abstract getById(id: number[]): Promise<Title[]>;
+    abstract getById(id: number): Promise<Title>;
+
     abstract getTitleSeasons(id: number): Promise<Season[]>
 }
