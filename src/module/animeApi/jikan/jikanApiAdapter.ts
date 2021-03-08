@@ -6,7 +6,7 @@ export class JikanApiAdapter extends AbstractApiAdapter {
 
 
     async searchForTitle(query: string): Promise<any> {
-        const url = encodeURIComponent(`${this.BASE_URL}search/anime?q=${query}&page=1`);
+        const url = encodeURI(`${this.BASE_URL}search/anime?q=${query}&page=1`);
         // @ts-ignore
         const { results } = await get(url);
 
@@ -14,13 +14,13 @@ export class JikanApiAdapter extends AbstractApiAdapter {
     }
 
     async getTitleInfo(titleId: number): Promise<any> {
-        const url = encodeURIComponent(`${this.BASE_URL}anime/${titleId}`);
+        const url = encodeURI(`${this.BASE_URL}anime/${titleId}`);
 
         return get(url);
     }
 
     async getTitleEpisodes(titleId: number, page?: number): Promise<any> {
-        const url = encodeURIComponent(`${this.BASE_URL}anime/${titleId}/episodes`);
+        const url = encodeURI(`${this.BASE_URL}anime/${titleId}/episodes`);
 
         return get(url);
     }
