@@ -7,8 +7,8 @@ export class JikanApiAdapter extends AbstractApiAdapter {
 
     async searchForTitle(query: string): Promise<any> {
         const url = encodeURI(`${this.BASE_URL}search/anime?q=${query}&page=1`);
-        // @ts-ignore
-        const { results } = await get(url);
+        const response = await get(url);
+        const { results } = response?.data;
 
         return results;
     }
