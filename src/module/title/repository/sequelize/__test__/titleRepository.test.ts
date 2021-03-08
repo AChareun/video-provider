@@ -4,17 +4,10 @@ import { TitleRepository } from '../titleRepository';
 import { ResourceNotFoundError } from '../../../../error/resourceNotFoundError';
 import { TitleCreationAttributes, TitleModel } from '../../../model/titleModel';
 import { Title } from '../../../entity/title';
-import {
-    fromModelToEntity,
-    fromEntityToModel,
-    fromModelToEntity as fromTitleModelToEntity
-} from '../../../mapper/titleMapper';
+import { fromModelToEntity as fromTitleModelToEntity } from '../../../mapper/titleMapper';
 import { SeasonCreationAttributes, SeasonModel } from '../../../../season/model/seasonModel';
 import { Season } from '../../../../season/entity/season';
-import {
-    fromModelToEntity as fromSeasonModelToEntity,
-    fromModelToEntity as fromModelToEntitySeason
-} from '../../../../season/mapper/seasonMapper';
+import { fromModelToEntity as fromSeasonModelToEntity } from '../../../../season/mapper/seasonMapper';
 
 import { fakeNewSeason, fakeNewTitle } from '../../../../__test__/testMocks';
 import { insertModel } from '../../../../__test__/testHelpers';
@@ -104,7 +97,7 @@ test('Method getPaginated returns correct amount of titles', async () => {
     await expect(testRepo.getPaginated(1, 2)).resolves.toEqual([title3]);
 });
 
-test('Method addTitle correctly saves a new record with id 1', async () => {
+test('Method addRegistry correctly saves a new record with id 1', async () => {
     const newTitleMock = new Title({
         episodeCount: 0,
         id: undefined,
@@ -115,7 +108,7 @@ test('Method addTitle correctly saves a new record with id 1', async () => {
         synopsis: 'undefined',
         trailerUrl: 'undefined'
     })
-    const newTitle = await testRepo.addTitle(newTitleMock);
+    const newTitle = await testRepo.addRegistry(newTitleMock);
 
     await expect(testRepo.getById(1)).resolves.toEqual(newTitle);
 });

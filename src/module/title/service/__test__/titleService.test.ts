@@ -38,8 +38,8 @@ test('TitleService method addTitle should call correct TitleRepository method', 
     // @ts-expect-error
     testService.addTitle(mockData);
 
-    expect(titleRepositoryMock.addTitle).toHaveBeenCalledTimes(1);
-    expect(titleRepositoryMock.addTitle).toHaveBeenCalledWith(mockData);
+    expect(titleRepositoryMock.addRegistry).toHaveBeenCalledTimes(1);
+    expect(titleRepositoryMock.addRegistry).toHaveBeenCalledWith(mockData);
 });
 
 test('TitleService method getTitleSeasons should call correct TitleRepository method', () => {

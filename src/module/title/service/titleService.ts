@@ -21,7 +21,7 @@ export class TitleService {
     }
 
     async addTitle(data: Title): Promise<Title> {
-        return this.titleRepository.addTitle(data);
+        return this.titleRepository.addRegistry(data);
     }
 
     async getTitleSeasons(id: number): Promise<Season[]> {

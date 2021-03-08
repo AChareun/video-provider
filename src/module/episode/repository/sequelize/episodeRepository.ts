@@ -4,7 +4,7 @@ import { AbstractEpisodeRepository } from '../abstractEpisodeRepository';
 import { ResourceNotFoundError } from '../../../error/resourceNotFoundError';
 import { GenericDatabaseError } from '../../../error/genericDatabaseError';
 import { fromEntityToModel, fromModelToEntity } from '../../mapper/episodeMapper';
-import { EpisodeCreationAttributes, EpisodeModel } from '../../model/episodeModel';
+import { EpisodeModel } from '../../model/episodeModel';
 import { Episode } from '../../entity/episode';
 import { SeasonModel } from '../../../season/module';
 
@@ -88,7 +88,7 @@ export class EpisodeRepository extends AbstractEpisodeRepository {
         }
     }
 
-    async addEpisode(data: Episode): Promise<Episode> {
+    async addRegistry(data: Episode): Promise<Episode> {
         const newEpisode = this.episodeModel.build(fromEntityToModel(data));
         try {
             await newEpisode.save();

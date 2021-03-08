@@ -12,10 +12,7 @@ import { fromModelToEntity as fromTitleModelToEntity } from '../../../../title/m
 import { TitleModel, TitleCreationAttributes } from '../../../../title/model/titleModel';
 
 import { Episode } from '../../../../episode/entity/episode';
-import {
-    fromModelToEntity,
-    fromModelToEntity as fromModelToEntityEpisode
-} from '../../../../episode/mapper/episodeMapper';
+import { fromModelToEntity } from '../../../../episode/mapper/episodeMapper';
 import { EpisodeCreationAttributes, EpisodeModel } from '../../../../episode/model/episodeModel';
 
 import { fakeNewEpisode, fakeNewSeason, fakeNewTitle } from '../../../../__test__/testMocks';
@@ -129,7 +126,7 @@ test('Method addSeason correctly saves a new record with id 1', async () => {
         TitleId: 1,
         Trailer: 'undefined'
     }
-    const newTitle = await testRepo.addSeason(mockSeason);
+    const newTitle = await testRepo.addRegistry(mockSeason);
 
     await expect(testRepo.getById(1)).resolves.toEqual(newTitle);
     expect(newTitle.TitleId).toEqual(1);
