@@ -9,14 +9,14 @@ import {
 import { SeasonModel } from '../../season/model/seasonModel';
 
 interface TitleAttributes {
-    id: number;
+    id: number | null;
     name: string;
-    synopsis: string | undefined;
-    episodeCount: number | undefined;
-    seasonCount: number | undefined;
-    sourceImage: string | undefined;
-    premiereDate: Date | undefined;
-    trailerUrl: string | undefined;
+    synopsis: string | null;
+    episodeCount: number | null;
+    seasonCount: number | null;
+    sourceImage: string | null;
+    premiereDate: Date | null;
+    trailerUrl: string | null;
 }
 
 export interface TitleCreationAttributes extends Optional<TitleAttributes, 'id'> {}
@@ -24,14 +24,14 @@ export interface TitleCreationAttributes extends Optional<TitleAttributes, 'id'>
 export class TitleModel
     extends Model<TitleAttributes, TitleCreationAttributes>
     implements TitleAttributes {
-    id!: number;
+    id!: number | null;
     name!: string;
-    synopsis!: string | undefined;
-    episodeCount!: number | undefined;
-    seasonCount!: number | undefined;
-    sourceImage!: string | undefined;
-    premiereDate!: Date | undefined;
-    trailerUrl!: string | undefined;
+    synopsis!: string | null;
+    episodeCount!: number | null;
+    seasonCount!: number | null;
+    sourceImage!: string | null;
+    premiereDate!: Date | null;
+    trailerUrl!: string | null;
 
     readonly createdAt!: Date;
     readonly updatedAt!: Date;
