@@ -18,7 +18,15 @@ import {
 } from '../module/episode/module';
 
 function configureSequelizeDatabase(): Sequelize {
-    const sequelize = new Sequelize(`${process.env.DATABASE_URL}`);
+    const sequelize = new Sequelize(`${process.env.DATABASE_URL}`,
+        {
+            ssl: true,
+            dialectOptions: {
+                ssl: {
+                    rejectUnauthorized: false,
+                },
+            }
+        });
 
     return sequelize;
 }
