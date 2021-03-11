@@ -104,6 +104,7 @@ export const seasonServiceMock = {
 
 export const titleMock = new Title({
     id: 1,
+    externalId: 1,
     name: 'name',
     synopsis: 'synopsis',
     episodeCount: 1,
@@ -115,6 +116,7 @@ export const titleMock = new Title({
 
 export const fakeNewTitle: TitleCreationAttributes = {
     id: undefined,
+    externalId: 1,
     name: 'Title',
     synopsis: 'Synopsis',
     episodeCount: 10,

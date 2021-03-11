@@ -15,6 +15,7 @@ titleModel
     .create({
         episodeCount: 26,
         id: undefined,
+            externalId: 30,
         name: 'Neon Genesis Evangelion',
         premiereDate: new Date('Oct. 04, 1995'),
         seasonCount: 1,
@@ -439,6 +440,7 @@ setTimeout(() => {
             .create({
                 episodeCount: 75,
                 id: 0,
+                    externalId: 16498,
                 premiereDate: new Date('2013-04-07T00:00:00+00:00'),
                 seasonCount: 4,
                 sourceImage:
