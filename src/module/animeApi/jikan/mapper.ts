@@ -6,6 +6,7 @@ interface IJikanTitle {
     "synopsis": string,
     "episodes": number,
     "start_date": string,
+    "mal_id": number,
 }
 
 export function fromApiResponseToEntity(data: IJikanTitle): Title {
@@ -14,11 +15,13 @@ export function fromApiResponseToEntity(data: IJikanTitle): Title {
         image_url: sourceImage,
         synopsis,
         episodes: episodeCount,
+        mal_id: externalId,
     } = data;
     const premiereDate = new Date(data.start_date);
 
     return new Title({
         id: undefined,
+        externalId,
         name,
         synopsis,
         episodeCount,

@@ -10,6 +10,7 @@ import { SeasonModel } from '../../season/model/seasonModel';
 
 interface TitleAttributes {
     id: number | null;
+    externalId: number | null;
     name: string;
     synopsis: string | null;
     episodeCount: number | null;
@@ -25,6 +26,7 @@ export class TitleModel
     extends Model<TitleAttributes, TitleCreationAttributes>
     implements TitleAttributes {
     id!: number | null;
+    externalId!: number | null
     name!: string;
     synopsis!: string | null;
     episodeCount!: number | null;
@@ -51,6 +53,11 @@ export class TitleModel
                     autoIncrement: true,
                     allowNull: false,
                     primaryKey: true,
+                    unique: true,
+                },
+                externalId: {
+                    type: DataTypes.BIGINT,
+                    allowNull: true,
                     unique: true,
                 },
                 name: {

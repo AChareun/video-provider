@@ -16,9 +16,11 @@ export const fromEntityToModel = (title: Title): TitleCreationAttributes => {
         EpisodeCount,
         TitleSynopsis,
         TitleName,
+        ExternalId,
     } = title;
 
     return {
+        externalId: ExternalId,
         episodeCount: EpisodeCount,
         id: TitleId,
         name: TitleName,
@@ -26,6 +28,6 @@ export const fromEntityToModel = (title: Title): TitleCreationAttributes => {
         seasonCount: SeasonCount,
         sourceImage: SourceImage,
         synopsis: TitleSynopsis,
-        trailerUrl: Trailer,
+        trailerUrl: Trailer
     };
 };

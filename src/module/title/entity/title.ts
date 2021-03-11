@@ -1,5 +1,6 @@
 export class Title {
     TitleId: number | null;
+    ExternalId: number | null;
     TitleName: string;
     TitleSynopsis: string | null;
     EpisodeCount: number | null;
@@ -10,6 +11,7 @@ export class Title {
 
     constructor({
         id,
+        externalId,
         name,
         synopsis,
         episodeCount,
@@ -19,6 +21,7 @@ export class Title {
         trailerUrl,
     }: {
         id: number | undefined;
+        externalId: number | undefined;
         name: string;
         synopsis: string | undefined;
         episodeCount: number | undefined;
@@ -28,6 +31,7 @@ export class Title {
         trailerUrl: string | undefined;
     }) {
         this.TitleId = id || null;
+        this.ExternalId = externalId || null;
         this.TitleName = name;
         this.TitleSynopsis = synopsis || null;
         this.EpisodeCount = episodeCount || null;
