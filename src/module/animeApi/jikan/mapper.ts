@@ -21,7 +21,7 @@ export function fromApiResponseToEntity(data: IJikanTitle): Title {
         mal_id: externalId,
     } = data;
 
-    const premiereDate = data?.start_date ? new Date(data.start_date) : data.aired.from ? new Date(data.aired.from) : undefined;
+    const premiereDate = data?.start_date ? new Date(data.start_date) : data?.aired?.from ? new Date(data.aired.from) : undefined;
     const trailerUrl = data?.trailer_url;
     const synopsis = data?.synopsis.slice(0, 252) + '...';
 
