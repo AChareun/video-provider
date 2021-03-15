@@ -16,17 +16,17 @@ import {
     EpisodeRepository,
     EpisodeService,
 } from '../module/episode/module';
+import { CacheManager } from '../module/cache/cacheManager';
 
 function configureSequelizeDatabase(): Sequelize {
-    const sequelize = new Sequelize(`${process.env.DATABASE_URL}`,
-        {
-            ssl: true,
-            dialectOptions: {
-                ssl: {
-                    rejectUnauthorized: false,
-                },
-            }
-        });
+    const sequelize = new Sequelize(`${process.env.DATABASE_URL}`, {
+        ssl: true,
+        dialectOptions: {
+            ssl: {
+                rejectUnauthorized: false,
+            },
+        },
+    });
 
     return sequelize;
 }
@@ -35,6 +35,7 @@ function addCommonDefinitions(container: DIContainer): void {
     container.addDefinitions({
         Sequelize: factory(configureSequelizeDatabase),
         ResponseHelper: object(ApiResponseHelper).construct([]),
+        ExternalApiAdapter: object(JikanApiAdapter).construct(),
     });
 }
 
@@ -48,9 +49,14 @@ function addTitleModuleDefinitions(container: DIContainer): void {
     container.addDefinitions({
         TitleModel: factory(configureTitleModel),
         TitleRepository: object(TitleRepository).construct(get('TitleModel')),
+        TitleCacheManager: object(CacheManager).construct(
+            get('ExternalApiAdapter'),
+            get('TitleRepository')
+        ),
         TitleService: object(TitleService).construct(
             get('TitleRepository'),
-            object(JikanApiAdapter).construct()
+            get('ExternalApiAdapter'),
+            get('TitleCacheManager')
         ),
         TitleController: object(TitleController).construct(
             get('TitleService'),
