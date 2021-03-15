@@ -77,9 +77,11 @@ export class TitleController extends AbstractController {
     async getById(req: Request, res: Response): Promise<void> {
         let apiResponse: IApiResponse;
         const { titleId: id } = req.params;
+        const isExternal = req.query?.source === 'external';
+
         if (id || id === '0') {
             try {
-                const title = await this.titleService.getById(parseInt(id));
+                const title = await this.titleService.getById(parseInt(id), isExternal);
                 apiResponse = this.responseHelper.buildOkResponse([title]);
             } catch (error) {
                 apiResponse = this.responseHelper.buildErrorResponse(error.name);

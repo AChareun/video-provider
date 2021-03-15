@@ -123,11 +123,11 @@ export class TitleRepository extends AbstractTitleRepository {
         return titleSeasons.map(fromModelToEntitySeason);
     }
 
-    async getByName(name: string): Promise<Title> {
+    async getByExternalId(id:number): Promise<Title> {
         let title;
 
         try {
-            title = await this.titleModel.findOne({where: {name: name}});
+            title = await this.titleModel.findOne({where: {externalId: id}});
         } catch (error) {
             console.log('Error log: ', error);
             if (error instanceof DatabaseError) {

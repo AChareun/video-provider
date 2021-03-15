@@ -143,11 +143,11 @@ export class EpisodeRepository extends AbstractEpisodeRepository {
         return fromModelToEntity(episode);
     }
 
-    async getByName(name: string): Promise<Episode> {
+    async getByExternalId(id: number): Promise<Episode> {
         let episode: EpisodeModel | null;
 
         try {
-            episode = await this.episodeModel.findOne({where: {name: name}});
+            episode = await this.episodeModel.findOne({where: {id: id}});
         } catch (error) {
             console.log('Error log: ', error);
             if (error instanceof DatabaseError) {

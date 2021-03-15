@@ -131,11 +131,11 @@ export class SeasonRepository extends AbstractSeasonRepository {
         return seasonEpisodes.map(fromModelToEntityEpisode);
     }
 
-    async getByName(name: string): Promise<Season> {
+    async getByExternalId(id: number): Promise<Season> {
         let season;
 
         try {
-            season = await this.seasonModel.findOne({where: {name: name}});
+            season = await this.seasonModel.findOne({where: {id: id}});
         } catch (error) {
             console.log('Error log: ', error);
             if (error instanceof DatabaseError) {
