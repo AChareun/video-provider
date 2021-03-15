@@ -2,15 +2,18 @@ import { Title } from '../entity/title';
 import { AbstractTitleRepository } from '../repository/abstractTitleRepository';
 import { Season } from '../../season/entity/season';
 import { AbstractApiAdapter } from '../../animeApi/abstractApiAdapter';
+import { CacheManager } from '../../cache/cacheManager';
 
 export class TitleService {
 
     titleRepository: AbstractTitleRepository;
     apiAdapter: AbstractApiAdapter;
+    cacheManager: CacheManager<Title>
 
-    constructor(titleRepository: AbstractTitleRepository, apiAdapter: AbstractApiAdapter) {
+    constructor(titleRepository: AbstractTitleRepository, apiAdapter: AbstractApiAdapter, cacheManager: CacheManager<Title>) {
         this.titleRepository = titleRepository;
         this.apiAdapter = apiAdapter;
+        this.cacheManager = cacheManager;
     }
 
     async getPaginated(limit: number, offset: number): Promise<Array<Title>> {
@@ -18,8 +21,12 @@ export class TitleService {
     }
 
     async getById(ids: number[]): Promise<Title[]>
-    async getById(id: number): Promise<Title>
-    async getById(id: any): Promise<any> {
+    async getById(id: number, isExternal?: boolean): Promise<Title>
+    async getById(id: any, isExternal?: boolean): Promise<any> {
+        if (isExternal && !(Array.isArray(id))) {
+            return this.cacheManager.getResource(id);
+        }
+
         return this.titleRepository.getById(id);
     }
 
@@ -32,6 +39,6 @@ export class TitleService {
     }
 
     async searchTitles(query: string): Promise<any> {
-        return this.apiAdapter.searchForTitle(query);
+        return this.apiAdapter.searchForResource(query);
     }
 }

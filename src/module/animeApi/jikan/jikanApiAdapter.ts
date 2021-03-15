@@ -6,7 +6,7 @@ export class JikanApiAdapter extends AbstractApiAdapter {
     private BASE_URL = 'https://api.jikan.moe/v3/';
 
 
-    async searchForTitle(query: string): Promise<any> {
+    async searchForResource(query: string): Promise<any> {
         const url = encodeURI(`${this.BASE_URL}search/anime?q=${query}&page=1`);
         const response = await get(url);
         const { results } = response?.data;
@@ -14,15 +14,11 @@ export class JikanApiAdapter extends AbstractApiAdapter {
         return results.map(fromApiResponseToEntity);
     }
 
-    async getTitleInfo(titleId: number): Promise<any> {
+    async getResourceInfo(titleId: number): Promise<any> {
         const url = encodeURI(`${this.BASE_URL}anime/${titleId}`);
+        const response = await get(url);
+        const data = response?.data;
 
-        return get(url);
-    }
-
-    async getTitleEpisodes(titleId: number, page?: number): Promise<any> {
-        const url = encodeURI(`${this.BASE_URL}anime/${titleId}/episodes`);
-
-        return get(url);
+        return fromApiResponseToEntity(data);
     }
 }

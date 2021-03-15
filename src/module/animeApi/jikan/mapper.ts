@@ -7,17 +7,23 @@ interface IJikanTitle {
     "episodes": number,
     "start_date": string,
     "mal_id": number,
+    "trailer_url"?: string | undefined,
+    aired: {
+        from: string
+    }
 }
 
 export function fromApiResponseToEntity(data: IJikanTitle): Title {
     const {
         title: name,
         image_url: sourceImage,
-        synopsis,
         episodes: episodeCount,
         mal_id: externalId,
     } = data;
-    const premiereDate = new Date(data.start_date);
+
+    const premiereDate = data?.start_date ? new Date(data.start_date) : data.aired.from ? new Date(data.aired.from) : undefined;
+    const trailerUrl = data?.trailer_url;
+    const synopsis = data?.synopsis.slice(0, 252) + '...';
 
     return new Title({
         id: undefined,
@@ -28,6 +34,6 @@ export function fromApiResponseToEntity(data: IJikanTitle): Title {
         seasonCount: undefined,
         sourceImage,
         premiereDate,
-        trailerUrl: undefined
+        trailerUrl,
     });
 }
